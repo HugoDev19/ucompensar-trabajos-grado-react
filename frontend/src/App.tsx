@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAppStore } from '@/stores/app.store'
 import { useThemeStore } from '@/stores/theme.store'
 import { useAuth } from '@/hooks/useAuth'
@@ -20,12 +20,17 @@ export default function App() {
   const { isAuthenticated, isAuthenticating } = useAppStore()
   const { theme } = useThemeStore()
   const { login, logout, handleAuthDone } = useAuth()
+  const location = useLocation()
 
   useEffect(() => {
+    // For institucional branding, the login screen is always light
+    const isLogin = location.pathname === '/login'
+    const activeTheme = isLogin ? 'light' : theme
+    
     const root = window.document.documentElement
     root.classList.remove('light', 'dark')
-    root.classList.add(theme)
-  }, [theme])
+    root.classList.add(activeTheme)
+  }, [theme, location.pathname])
 
   return (
     <>

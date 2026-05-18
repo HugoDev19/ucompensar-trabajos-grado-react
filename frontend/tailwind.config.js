@@ -5,34 +5,48 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          orange: 'var(--brand-orange)',
-          'orange-hover': 'var(--brand-orange-hover)',
-          'orange-soft': 'var(--brand-orange-soft)',
-          'orange-light': 'var(--brand-orange-soft)',
-          green: 'var(--brand-green)',
-          'green-mid': 'var(--brand-green-mid)',
-          'green-soft': 'var(--brand-green-soft)',
-          'green-light': 'var(--brand-green-soft)',
+        primary: {
+          DEFAULT: 'var(--color-primary)',
+          hover: 'var(--color-primary-hover)',
+          soft: 'var(--color-primary-soft)',
+        },
+        secondary: {
+          DEFAULT: 'var(--color-secondary)',
+          hover: 'var(--color-secondary-hover)',
+          soft: 'var(--color-secondary-soft)',
+        },
+        accent: {
+          DEFAULT: 'var(--color-teal)',
+          soft: 'var(--color-teal-soft)',
+        },
+        highlight: {
+          DEFAULT: 'var(--color-amber)',
+          soft: 'var(--color-amber-soft)',
+        },
+        sand: {
+          DEFAULT: 'var(--color-sand)',
+          soft: 'var(--color-sand-soft)',
         },
         neutral: {
           bg: 'var(--color-bg)',
           surface: 'var(--color-surface)',
+          elevated: 'var(--color-surface-elevated)',
           border: 'var(--color-border)',
           text: 'var(--color-text)',
           muted: 'var(--color-text-muted)',
           dim: 'var(--color-text-dim)',
-          light: 'var(--color-surface)',
         },
       },
       fontFamily: {
-        sans: ['Geist', 'DM Sans', 'Segoe UI', 'system-ui', 'sans-serif'],
-        mono: ['Geist Mono', 'JetBrains Mono', 'monospace'],
+        sans: ['Sarabun', 'Segoe UI', 'system-ui', 'sans-serif'],
+        serif: ['Alegreya', 'Georgia', 'serif'],
+        display: ['Alegreya', 'serif'],
       },
       boxShadow: {
         card: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
         'card-hover': '0 4px 12px rgba(0,0,0,0.08)',
-        orange: '0 4px 14px rgba(224,90,30,0.32)',
+        primary: '0 4px 14px var(--color-primary-soft)',
+        secondary: '0 4px 14px var(--color-secondary-soft)',
       },
       animation: {
         'spin-slow': 'spin 0.8s linear infinite',

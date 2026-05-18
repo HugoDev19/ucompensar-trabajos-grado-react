@@ -27,12 +27,12 @@ export function CredentialsForm({ onLogin }: CredentialsFormProps) {
             type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
             onKeyDown={(e) => e.key === 'Enter' && onLogin()}
-            className="w-full px-3 py-2 pr-12 border-[1.5px] border-neutral-border rounded-lg text-[12px] text-neutral-text bg-neutral-light outline-none transition-all focus:border-brand-orange focus:bg-white focus:ring-2 focus:ring-brand-orange-light placeholder:text-neutral-muted/60"
+            className="w-full px-3 py-2 pr-12 border-[1.5px] border-neutral-border rounded-lg text-[12px] text-neutral-text bg-neutral-bg outline-none transition-all focus:border-primary focus:bg-neutral-surface focus:ring-2 focus:ring-primary-soft placeholder:text-neutral-muted/60"
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-neutral-muted hover:text-brand-orange transition-colors cursor-pointer"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-neutral-muted hover:text-primary transition-colors cursor-pointer"
           >
             {showPassword ? 'Ocultar' : 'Ver'}
           </button>
@@ -40,7 +40,7 @@ export function CredentialsForm({ onLogin }: CredentialsFormProps) {
       </div>
 
       <div className="text-right -mt-1">
-        <a href="#" className="text-[10.5px] text-brand-orange hover:underline">
+        <a href="#" className="text-[10.5px] text-primary hover:underline">
           ¿Olvidaste tu contraseña?
         </a>
       </div>
@@ -51,7 +51,7 @@ export function CredentialsForm({ onLogin }: CredentialsFormProps) {
 
       <p className="text-center text-[11px] text-neutral-muted mt-1">
         ¿No tienes cuenta?{' '}
-        <a href="#" className="text-brand-orange font-semibold hover:underline">
+        <a href="#" className="text-primary font-semibold hover:underline">
           Solicita acceso
         </a>
       </p>

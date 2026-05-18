@@ -11,7 +11,7 @@ export function Input({ label, className, id, ...props }: InputProps) {
       {label && (
         <label
           htmlFor={id}
-          className="field-label group-focus-within:text-[var(--brand-orange)] transition-colors"
+          className="field-label group-focus-within:text-[var(--color-primary)] transition-colors"
         >
           {label}
         </label>

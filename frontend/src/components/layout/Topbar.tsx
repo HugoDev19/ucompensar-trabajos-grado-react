@@ -47,23 +47,16 @@ export function Topbar({ activeSection, searchQuery, onSearchChange }: TopbarPro
   }
 
   return (
-    <header className="h-[64px] flex items-center px-6 gap-6 glass flex-shrink-0 relative z-30 transition-all duration-300">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 flex-1 text-[13px]">
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="text-[var(--color-text-muted)] hover:text-[var(--brand-orange)] transition-colors cursor-pointer font-medium"
-        >
-          UCompensar
-        </button>
-        <span className="text-[var(--color-border)] opacity-50">/</span>
-        <span className="font-bold text-[var(--color-text)] tracking-tight">
+    <header className="h-[64px] flex items-center px-6 gap-6 flex-shrink-0 relative z-30 transition-all duration-300">
+      {/* Breadcrumb / Title */}
+      <div className="flex-1">
+        <h1 className="text-[20px] font-bold text-[var(--color-primary)] font-display tracking-tight">
           {sectionLabels[activeSection]}
-        </span>
+        </h1>
       </div>
 
       {/* Search */}
-      <div className="flex items-center gap-2.5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-2 w-[280px] focus-within:border-[var(--brand-orange)] focus-within:ring-4 focus-within:ring-[var(--brand-orange-soft)] transition-all shadow-sm">
+      <div className="flex items-center gap-2.5 bg-[var(--color-surface)] border border-transparent rounded-full px-5 py-2 w-[320px] focus-within:border-[var(--color-primary)] focus-within:ring-2 focus-within:ring-[var(--color-primary-soft)] transition-all shadow-sm">
         <Search size={16} className="text-[var(--color-text-dim)] flex-shrink-0" />
         <input
           type="text"
@@ -74,39 +67,40 @@ export function Topbar({ activeSection, searchQuery, onSearchChange }: TopbarPro
         />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 border-r border-[var(--color-border)] pr-4">
         {/* Notifications */}
-        <button className="relative p-2.5 rounded-xl hover:bg-[var(--color-bg)] transition-all cursor-pointer text-[var(--color-text-muted)] hover:text-[var(--color-text)] border-none bg-transparent group">
-          <Bell size={20} className="transition-transform group-hover:rotate-12" />
-          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[var(--brand-orange)] rounded-full ring-2 ring-[var(--color-surface)]" />
+        <button className="relative p-2 rounded-xl hover:bg-[var(--color-surface)] transition-all cursor-pointer text-[var(--color-text-dim)] hover:text-[var(--color-text)] border-none bg-transparent group">
+          <Bell size={18} className="transition-transform group-hover:rotate-12" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-[var(--color-primary)] rounded-full ring-2 ring-[var(--color-bg)]" />
         </button>
 
         {/* Theme Toggle */}
         <button
           onClick={toggle}
-          className="p-2.5 rounded-xl hover:bg-[var(--color-bg)] transition-all cursor-pointer text-[var(--color-text-muted)] hover:text-[var(--color-text)] border-none bg-transparent"
+          className="p-2 rounded-xl hover:bg-[var(--color-surface)] transition-all cursor-pointer text-[var(--color-text-dim)] hover:text-[var(--color-text)] border-none bg-transparent"
           title="Alternar tema"
         >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
       </div>
 
       {/* User Profile Dropdown */}
       {currentUser && (
-        <div className="relative" ref={menuRef}>
+        <div className="relative pl-1" ref={menuRef}>
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="flex items-center gap-3 hover:bg-[var(--color-bg)] px-2 py-1.5 rounded-xl transition-all cursor-pointer border-none bg-transparent group"
+            className="flex items-center gap-3 hover:bg-[var(--color-surface)] px-2 py-1.5 rounded-full transition-all cursor-pointer border-none bg-transparent group"
           >
-            <div className="w-8 h-8 rounded-full bg-[var(--brand-orange-soft)] text-[var(--brand-orange)] flex items-center justify-center text-[11px] font-bold shadow-sm transition-transform group-hover:scale-105">
-              {currentUser.initials}
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[13px] font-bold text-[var(--color-text)]">
+            <div className="text-right">
+              <span className="text-[12px] font-bold text-[var(--color-text)] block">
                 {currentUser.name.split(' ')[0]}
               </span>
-              <ChevronDown size={14} className={cn('text-[var(--color-text-dim)] transition-transform', isUserMenuOpen && 'rotate-180')} />
             </div>
+            <img 
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=UCompensar&backgroundColor=f7d8a4" 
+              alt="Avatar" 
+              className="w-8 h-8 rounded-full border-2 border-[var(--color-bg)] shadow-sm object-cover transition-transform group-hover:scale-105"
+            />
           </button>
 
           {/* Popover */}
@@ -118,7 +112,7 @@ export function Topbar({ activeSection, searchQuery, onSearchChange }: TopbarPro
               </div>
               <div className="p-1.5">
                 <button className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-[var(--color-text)] hover:bg-[var(--color-bg)] rounded-xl transition-all border-none bg-transparent text-left cursor-pointer group">
-                  <Settings size={16} className="text-[var(--color-text-dim)] group-hover:text-[var(--brand-orange)]" />
+                  <Settings size={16} className="text-[var(--color-text-dim)] group-hover:text-[var(--color-primary)]" />
                   Configuración
                 </button>
                 <button

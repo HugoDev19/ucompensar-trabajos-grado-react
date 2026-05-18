@@ -16,9 +16,9 @@ export function DocumentosSection() {
         </div>
 
         {/* SharePoint status */}
-        <div className="mx-6 mt-5 mb-4 flex items-center gap-3 px-4 py-3 bg-[var(--brand-green-soft)] border border-[var(--brand-green)]/20 rounded-xl">
-          <CheckCircle size={16} className="text-[var(--brand-green)] flex-shrink-0" />
-          <span className="text-[12px] text-[var(--brand-green)] font-bold">
+        <div className="mx-6 mt-5 mb-4 flex items-center gap-3 px-4 py-3 bg-[var(--color-teal-soft)] border border-[var(--color-teal)]/20 rounded-xl">
+          <CheckCircle size={16} className="text-[var(--color-teal)] flex-shrink-0" />
+          <span className="text-[12px] text-[var(--color-teal)] font-bold">
             Conectado · unipanamericanaeduco.sharepoint.com
           </span>
         </div>

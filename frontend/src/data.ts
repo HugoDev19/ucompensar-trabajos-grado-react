@@ -12,11 +12,11 @@ export const TRAMITES = [
 
 // ─── Modality bars for dashboard chart ───────────────────────
 export const MODALITY_BARS = [
-  { label: 'Proyecto de grado',   count: 13, pct: 65, color: C.green  },
-  { label: 'Pasantía empresarial', count: 8,  pct: 40, color: C.greenM },
-  { label: 'Homologación',         count: 6,  pct: 30, color: C.orange },
-  { label: 'Emprendimiento',       count: 4,  pct: 20, color: '#F0956A' },
-  { label: 'Intercambio intl.',    count: 3,  pct: 15, color: '#B4B2A9' },
+  { label: 'Proyecto de grado',   count: 13, pct: 65, color: '#FF6600' },
+  { label: 'Pasantía empresarial', count: 8,  pct: 40, color: '#243455' },
+  { label: 'Homologación',         count: 6,  pct: 30, color: '#00adba' },
+  { label: 'Emprendimiento',       count: 4,  pct: 20, color: '#f7a400' },
+  { label: 'Intercambio intl.',    count: 3,  pct: 15, color: '#f7d8a4' },
 ]
 
 // ─── Trazabilidad audit log ────────────────────────────────────
