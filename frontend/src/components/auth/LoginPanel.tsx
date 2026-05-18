@@ -37,7 +37,7 @@ const features = [
 
 export function LoginPanel() {
   return (
-    <div className="w-[46%] bg-[var(--brand-green)] flex flex-col justify-between p-9 relative overflow-hidden">
+    <div className="w-[46%] bg-[var(--color-secondary)] flex flex-col justify-between p-9 relative overflow-hidden">
       {/* Decorative circles */}
       <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/[0.035] pointer-events-none" />
       <div className="absolute -bottom-16 -left-10 w-56 h-56 rounded-full bg-white/[0.025] pointer-events-none" />
@@ -48,14 +48,14 @@ export function LoginPanel() {
         </div>
 
         <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/[0.16] rounded-full px-3 py-1 text-[10.5px] text-white/80 mb-5">
-          <div className="w-1.5 h-1.5 rounded-full bg-brand-orange" />
+          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
           Sistema de Gestión Académica
         </div>
 
         <h1 className="text-[24px] font-bold text-white leading-[1.32] mb-2.5">
           Plataforma de<br />
           Trabajos de Grado<br />
-          <span className="text-brand-orange">UCompensar</span>
+          <span className="text-primary">UCompensar</span>
         </h1>
 
         <p className="text-[12px] text-white/60 leading-[1.7] max-w-[280px]">

@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn'
 import type { ButtonHTMLAttributes } from 'react'
 
-type ButtonVariant = 'primary' | 'outline' | 'ghost'
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,9 +11,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--brand-orange)] text-white font-bold hover:bg-[var(--brand-orange-hover)] hover:shadow-[0_4px_12px_rgba(224,90,30,0.3)] hover:-translate-y-px active:translate-y-0 transition-all duration-200 border-none',
+    'bg-[var(--color-primary)] text-white font-bold hover:bg-[var(--color-primary-hover)] hover:shadow-[0_4px_12px_var(--color-primary-soft)] hover:-translate-y-px active:translate-y-0 transition-all duration-200 border-none',
+  secondary:
+    'bg-[var(--color-secondary)] text-white font-bold hover:bg-[var(--color-secondary-hover)] hover:shadow-[0_4px_12px_var(--color-secondary-soft)] hover:-translate-y-px active:translate-y-0 transition-all duration-200 border-none',
   outline:
-    'bg-transparent border border-[var(--color-border)] text-[var(--color-text-muted)] font-bold hover:border-[var(--brand-orange)] hover:text-[var(--brand-orange)] hover:bg-[var(--brand-orange-soft)] transition-all duration-200',
+    'bg-transparent border border-[var(--color-border)] text-[var(--color-text-muted)] font-bold hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)] transition-all duration-200',
   ghost:
     'bg-transparent text-[var(--color-text-muted)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text)] transition-all duration-200 border-none',
 }

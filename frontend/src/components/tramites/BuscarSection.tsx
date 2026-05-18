@@ -29,7 +29,7 @@ export function BuscarSection() {
       <Card>
         {/* Student header */}
         <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-border">
-          <div className="w-10 h-10 rounded-full bg-brand-orange-light flex items-center justify-center text-[13px] font-bold text-brand-orange">
+          <div className="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center text-[13px] font-bold text-primary">
             LP
           </div>
           <div>
@@ -44,7 +44,7 @@ export function BuscarSection() {
         </div>
 
         {/* Tramite card */}
-        <div className="flex items-center justify-between px-3 py-2.5 bg-neutral-bg rounded-lg border-l-[3px] border-l-brand-orange">
+        <div className="flex items-center justify-between px-3 py-2.5 bg-neutral-bg rounded-lg border-l-[3px] border-l-primary">
           <div>
             <div className="text-[12px] font-semibold">{tramite.modalidad}</div>
             <div className="text-[10px] text-neutral-muted">

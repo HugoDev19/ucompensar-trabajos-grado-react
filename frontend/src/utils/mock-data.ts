@@ -133,21 +133,21 @@ export const DASHBOARD_METRICS: Metric[] = [
     label: 'Trámites activos',
     value: 34,
     sub: '+3 esta semana',
-    subColor: 'text-brand-green',
-    accent: 'orange',
+    subColor: 'text-accent',
+    accent: 'primary',
   },
   {
     label: 'Aprobados mes',
     value: 8,
     sub: 'Actas generadas',
     subColor: 'text-neutral-muted',
-    accent: 'green',
+    accent: 'secondary',
   },
   {
     label: 'Pendientes revisión',
     value: 12,
     sub: '4 con alerta',
-    subColor: 'text-amber-600',
+    subColor: 'text-amber-500',
   },
   {
     label: 'Docs SharePoint',
@@ -158,16 +158,16 @@ export const DASHBOARD_METRICS: Metric[] = [
 ]
 
 export const REPORTE_METRICS: Metric[] = [
-  { label: 'Tiempo promedio', value: '18 días', sub: '-3 días vs mes ant.', subColor: 'text-brand-green', accent: 'orange' },
-  { label: 'Tasa aprobación', value: '87%', sub: 'Último trimestre', subColor: 'text-neutral-muted', accent: 'green' },
+  { label: 'Tiempo promedio', value: '18 días', sub: '-3 días vs mes ant.', subColor: 'text-accent', accent: 'primary' },
+  { label: 'Tasa aprobación', value: '87%', sub: 'Último trimestre', subColor: 'text-neutral-muted', accent: 'secondary' },
   { label: 'Actas generadas', value: 31, sub: 'Consejo facultad', subColor: 'text-neutral-muted' },
-  { label: 'Alertas activas', value: 4, sub: 'Revisar urgente', subColor: 'text-amber-600' },
+  { label: 'Alertas activas', value: 4, sub: 'Revisar urgente', subColor: 'text-amber-500' },
 ]
 
 export const REPORTE_BARS = [
-  { label: 'Proyecto de grado', count: 13, pct: 65, color: '#2D6135' },
-  { label: 'Pasantía empresarial', count: 8, pct: 40, color: '#3D7F48' },
-  { label: 'Homologación', count: 6, pct: 30, color: '#E05A1E' },
-  { label: 'Emprendimiento', count: 4, pct: 20, color: '#F0956A' },
-  { label: 'Intercambio intl.', count: 3, pct: 15, color: '#B4B2A9' },
+  { label: 'Proyecto de grado', count: 13, pct: 65, color: '#FF6600' },
+  { label: 'Pasantía empresarial', count: 8, pct: 40, color: '#243455' },
+  { label: 'Homologación', count: 6, pct: 30, color: '#00adba' },
+  { label: 'Emprendimiento', count: 4, pct: 20, color: '#f7a400' },
+  { label: 'Intercambio intl.', count: 3, pct: 15, color: '#f7d8a4' },
 ]

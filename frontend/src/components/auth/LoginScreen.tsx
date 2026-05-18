@@ -14,20 +14,19 @@ interface LoginScreenProps {
 
 export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [activeTab, setActiveTab] = useState<TabType>('sso')
-  const { theme } = useThemeStore()
 
   return (
     <div className="flex h-screen min-h-[600px] bg-[var(--color-bg)] transition-colors duration-300">
       <LoginPanel />
 
       <div className="flex-1 flex flex-col items-center justify-center px-11 py-9 relative bg-[var(--color-surface)]">
-        <p className="absolute top-6 right-8 text-[12px] text-[var(--color-text-dim)] cursor-pointer hover:text-[var(--brand-orange)] transition-colors font-medium">
+        <p className="absolute top-6 right-8 text-[12px] text-[var(--color-text-dim)] cursor-pointer hover:text-[var(--color-primary)] transition-colors font-medium">
           ¿Necesitas ayuda?
         </p>
 
         <div className="w-full max-w-[340px] animate-in">
           <div className="flex justify-center mb-8">
-            <Logo variant={theme === 'dark' ? 'light' : 'dark'} size="md" />
+            <Logo variant="dark" size="md" />
           </div>
 
           <div className="text-center mb-8">

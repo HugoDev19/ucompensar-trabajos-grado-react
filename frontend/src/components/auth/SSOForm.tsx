@@ -32,7 +32,7 @@ export function SSOForm({ onLogin, onSwitchToCredentials }: SSOFormProps) {
         </div>
       </button>
 
-      <div className="bg-brand-green-light border border-[#C0D9C5] rounded-lg px-3.5 py-2.5 flex gap-2 items-start">
+      <div className="bg-[var(--color-secondary-soft)] border border-[var(--color-secondary)]/20 rounded-lg px-3.5 py-2.5 flex gap-2 items-start">
         <svg
           width="13"
           height="13"
@@ -40,10 +40,10 @@ export function SSOForm({ onLogin, onSwitchToCredentials }: SSOFormProps) {
           fill="none"
           className="flex-shrink-0 mt-0.5"
         >
-          <circle cx="8" cy="8" r="6.5" stroke="#2D6135" strokeWidth="1.4" />
-          <path d="M8 7v5M8 5v1" stroke="#2D6135" strokeWidth="1.4" strokeLinecap="round" />
+          <circle cx="8" cy="8" r="6.5" stroke="var(--color-secondary)" strokeWidth="1.4" />
+          <path d="M8 7v5M8 5v1" stroke="var(--color-secondary)" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
-        <p className="text-[10.5px] text-[#1A4020] leading-[1.5]">
+        <p className="text-[10.5px] text-[var(--color-secondary)] leading-[1.5]">
           Usa tu correo{' '}
           <strong className="font-semibold">@ucompensar.edu.co</strong> — la
           misma cuenta de Teams, Outlook y SharePoint.
@@ -59,7 +59,7 @@ export function SSOForm({ onLogin, onSwitchToCredentials }: SSOFormProps) {
             <button
               key={label}
               onClick={onSwitchToCredentials}
-              className="flex-1 text-[10.5px] py-1.5 px-3 border border-neutral-border rounded-lg bg-white text-neutral-muted cursor-pointer hover:border-brand-orange hover:text-brand-orange transition-colors"
+              className="flex-1 text-[10.5px] py-1.5 px-3 border border-neutral-border rounded-lg bg-white text-neutral-muted cursor-pointer hover:border-primary hover:text-primary transition-colors"
             >
               {label}
             </button>

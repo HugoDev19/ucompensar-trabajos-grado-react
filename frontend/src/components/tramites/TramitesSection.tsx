@@ -13,7 +13,7 @@ export function TramitesSection() {
         <div className="px-6 py-5 border-b border-[var(--color-border)] bg-[var(--color-bg)]/30 flex items-center justify-between">
           <div>
             <h2 className="text-[16px] font-bold text-[var(--color-text)] tracking-tight">Todos los trámites</h2>
-            <p className="text-[12px] text-[var(--color-text-muted)] mt-0.5">Actualmente hay <span className="font-bold text-[var(--brand-orange)]">34 trámites</span> en proceso.</p>
+            <p className="text-[12px] text-[var(--color-text-muted)] mt-0.5">Actualmente hay <span className="font-bold text-[var(--color-primary)]">34 trámites</span> en proceso.</p>
           </div>
           <div className="flex gap-3">
             <Select className="w-48">
@@ -38,7 +38,7 @@ export function TramitesSection() {
             <tbody>
               {MOCK_TRAMITES.map((t) => (
                 <tr key={t.id} className="group cursor-default">
-                  <td className="td font-bold text-[var(--brand-green)]">{t.cedula}</td>
+                  <td className="td font-bold text-[var(--color-secondary)]">{t.cedula}</td>
                   <td className="td font-bold text-[var(--color-text)]">{t.estudiante}</td>
                   <td className="td text-[var(--color-text-muted)]">{t.modalidad}</td>
                   <td className="td text-[var(--color-text-muted)] truncate max-w-[150px]">{t.programa}</td>

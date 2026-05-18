@@ -10,9 +10,9 @@ interface BadgeProps {
 }
 
 const variantMap: Record<BadgeVariant, string> = {
-  orange: 'bg-[var(--brand-orange-soft)] text-[var(--brand-orange)] border border-[var(--brand-orange)]/20',
-  green: 'bg-[var(--brand-green-soft)] text-[var(--brand-green)] border border-[var(--brand-green)]/20',
-  blue: 'bg-blue-500/10 text-blue-500 border border-blue-500/20',
+  orange: 'bg-[var(--color-primary-soft)] text-[var(--color-primary)] border border-[var(--color-primary)]/20',
+  green: 'bg-[var(--color-teal-soft)] text-[var(--color-teal)] border border-[var(--color-teal)]/20',
+  blue: 'bg-[var(--color-secondary-soft)] text-[var(--color-secondary)] border border-[var(--color-secondary)]/20',
   gray: 'bg-[var(--color-bg)] text-[var(--color-text-muted)] border border-[var(--color-border)]',
   red: 'bg-red-500/10 text-red-500 border border-red-500/20',
 }

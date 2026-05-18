@@ -37,7 +37,7 @@ const NavItem = memo(function NavItem({ item, active, collapsed, onClick }: NavI
         'w-full flex items-center gap-2.5 rounded-xl transition-all duration-200 relative cursor-pointer border-none outline-none mb-0.5',
         collapsed ? 'px-2 py-2.5 justify-center' : 'px-3 py-2 justify-start',
         active 
-          ? 'bg-[var(--brand-orange)] text-white font-semibold shadow-lg' 
+          ? 'bg-[var(--color-primary)] text-white font-semibold shadow-lg' 
           : 'text-white/70 hover:text-white hover:bg-white/10'
       )}
       style={{ fontSize: 12 }}
@@ -48,7 +48,7 @@ const NavItem = memo(function NavItem({ item, active, collapsed, onClick }: NavI
         <span
           className={cn(
             'text-[9px] font-bold px-1.5 py-0.5 rounded-full transition-colors',
-            active ? 'bg-white/20 text-white' : 'bg-[var(--brand-orange)] text-white'
+            active ? 'bg-white/20 text-white' : 'bg-[var(--color-primary)] text-white'
           )}
         >
           {item.badge}
@@ -75,7 +75,7 @@ export function Sidebar({ user, onLogout }: SidebarProps) {
     <aside
       className={cn(
         'flex flex-col flex-shrink-0 h-full transition-all duration-300 overflow-hidden z-40',
-        theme === 'dark' ? 'bg-[var(--color-surface)] border-r border-white/5' : 'bg-[var(--brand-green)] border-r border-black/10'
+        theme === 'dark' ? 'bg-[var(--color-surface)] border-r border-white/5' : 'bg-[var(--color-secondary)] border-r border-black/10'
       )}
       style={{ width: collapsed ? 64 : 240 }}
     >
@@ -131,13 +131,12 @@ export function Sidebar({ user, onLogout }: SidebarProps) {
           'flex items-center gap-3 p-2 rounded-xl transition-all',
           !collapsed && 'hover:bg-white/5'
         )}>
-          <div
-            className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 shadow-md transition-transform hover:scale-105"
-            style={{ background: 'var(--brand-orange)' }}
+          <img 
+            src="https://api.dicebear.com/7.x/notionists/svg?seed=UCompensar&backgroundColor=f7d8a4" 
+            alt="Avatar" 
+            className="w-9 h-9 rounded-full border-2 border-white/10 shadow-md object-cover transition-transform hover:scale-105"
             title={collapsed ? user.name : undefined}
-          >
-            {user.initials}
-          </div>
+          />
           {!collapsed && (
             <>
               <div className="flex-1 min-w-0 animate-in">

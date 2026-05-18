@@ -24,17 +24,17 @@ export const AUTH_STEPS = [
 ]
 
 export const C = {
-  orange:  '#E05A1E',
-  orangeH: '#C44E18',
-  orangeL: '#FEF0E8',
-  green:   '#2D6135',
-  greenM:  '#3D7F48',
-  greenL:  '#EAF2EC',
-  bg:      '#F5F5F3',
-  border:  '#E0DDD8',
-  text:    '#1A1A1A',
-  muted:   '#6B6B68',
-  light:   '#FAF9F7',
+  orange:  '#FF6600',
+  orangeH: '#E65C00',
+  orangeL: 'rgba(255, 102, 0, 0.1)',
+  green:   '#00adba',
+  greenM:  '#008E99',
+  greenL:  'rgba(0, 173, 186, 0.1)',
+  bg:      '#FDFDFD',
+  border:  '#E2E8F0',
+  text:    '#0F172A',
+  muted:   '#475569',
+  light:   '#FFFFFF',
 }
 
 export const MODALIDADES = [
