@@ -36,8 +36,9 @@ export function TrazabilidadSection() {
             <StatusBadge status="en-revision" />
           </div>
         </div>
-        <button className="btn-primary gap-2">
-          <Send size={14} /> Enviar a consejo
+        <button className="btn-primary gap-2.5 font-bold text-sm px-4 py-2.5">
+          <Send size={16} />
+          Enviar a revisión   
         </button>
       </div>
 

@@ -17,9 +17,9 @@ export function DashboardSection() {
           </svg>
         </div>
         <div className="flex-1">
-          <h3 className="text-[14px] font-bold text-white mb-0.5">Atención inmediata requerida</h3>
+          <h3 className="text-[16px] font-bold text-[var(--color-text)] tracking-tight">Atención inmediata requerida</h3>
           <p className="text-[13px] text-[var(--color-text-dim)]">
-            Tienes <strong className="text-white">4 trámites</strong> que requieren atención inmediata por inactividad prolongada.
+            Tienes <strong className="text-[var(--color-text)]">4 trámites</strong> que requieren atención inmediata por inactividad prolongada.
           </p>
         </div>
         <button
