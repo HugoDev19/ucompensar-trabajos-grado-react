@@ -10,9 +10,12 @@ type TabType = 'sso' | 'credentials'
 
 interface LoginScreenProps {
   onLogin: () => void
+  onCredentialsLogin: (email: string, password: string) => void
+  isLoggingIn?: boolean
+  loginError?: string | null
 }
 
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+export function LoginScreen({ onLogin, onCredentialsLogin, isLoggingIn, loginError }: LoginScreenProps) {
   const [activeTab, setActiveTab] = useState<TabType>('sso')
 
   return (
@@ -64,7 +67,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 onSwitchToCredentials={() => setActiveTab('credentials')}
               />
             ) : (
-              <CredentialsForm onLogin={onLogin} />
+              <CredentialsForm onSubmit={onCredentialsLogin} isLoading={isLoggingIn} error={loginError} />
             )}
           </div>
         </div>

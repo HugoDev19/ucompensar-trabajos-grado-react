@@ -3,19 +3,36 @@ import { Input } from '@/components/ui'
 import { Button } from '@/components/ui'
 
 interface CredentialsFormProps {
-  onLogin: () => void
+  onSubmit: (email: string, password: string) => void
+  isLoading?: boolean
+  error?: string | null
 }
 
-export function CredentialsForm({ onLogin }: CredentialsFormProps) {
+export function CredentialsForm({ onSubmit, isLoading, error }: CredentialsFormProps) {
   const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = () => {
+    if (!email || !password || isLoading) return
+    onSubmit(email, password)
+  }
 
   return (
     <div className="flex flex-col gap-3">
+      {error && (
+        <p className="text-[11.5px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          {error}
+        </p>
+      )}
+
       <Input
         label="Usuario o correo"
         type="email"
         placeholder="usuario@ucompensar.edu.co"
-        onKeyDown={(e) => e.key === 'Enter' && onLogin()}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
       />
 
       <div className="flex flex-col gap-1">
@@ -26,7 +43,9 @@ export function CredentialsForm({ onLogin }: CredentialsFormProps) {
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
-            onKeyDown={(e) => e.key === 'Enter' && onLogin()}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
             className="w-full px-3 py-2 pr-12 border-[1.5px] border-neutral-border rounded-lg text-[12px] text-neutral-text bg-neutral-bg outline-none transition-all focus:border-primary focus:bg-neutral-surface focus:ring-2 focus:ring-primary-soft placeholder:text-neutral-muted/60"
           />
           <button
@@ -45,8 +64,8 @@ export function CredentialsForm({ onLogin }: CredentialsFormProps) {
         </a>
       </div>
 
-      <Button onClick={onLogin} size="lg" className="w-full text-[13px]">
-        Iniciar sesión
+      <Button onClick={handleSubmit} size="lg" className="w-full text-[13px]" disabled={isLoading}>
+        {isLoading ? 'Iniciando sesión…' : 'Iniciar sesión'}
       </Button>
 
       <p className="text-center text-[11px] text-neutral-muted mt-1">

@@ -6,6 +6,7 @@ interface AppState {
   isAuthenticated: boolean
   isAuthenticating: boolean
   currentUser: User | null
+  accessToken: string | null
 
   // Navigation
   activeSection: NavSection
@@ -14,6 +15,7 @@ interface AppState {
   // Actions
   startAuth: () => void
   finishAuth: () => void
+  loginSuccess: (user: User, accessToken: string) => void
   logout: () => void
   setSection: (section: NavSection) => void
   setSearchQuery: (q: string) => void
@@ -31,6 +33,7 @@ export const useAppStore = create<AppState>((set) => ({
   isAuthenticated: false,
   isAuthenticating: false,
   currentUser: null,
+  accessToken: null,
   activeSection: 'dashboard',
   searchQuery: '',
 
@@ -43,10 +46,18 @@ export const useAppStore = create<AppState>((set) => ({
       currentUser: MOCK_USER,
     }),
 
+  loginSuccess: (user, accessToken) =>
+    set({
+      isAuthenticated: true,
+      currentUser: user,
+      accessToken,
+    }),
+
   logout: () =>
     set({
       isAuthenticated: false,
       currentUser: null,
+      accessToken: null,
       activeSection: 'dashboard',
     }),
 

@@ -1,16 +1,16 @@
-# Graph Report - ucompensar-trabajos-grado-react  (2026-08-20)
+# Graph Report - ucompensar-trabajos-grado-react  (2026-08-19)
 
 ## Corpus Check
-- 54 files · ~25,037 words
+- 54 files · ~23,567 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 328 nodes · 529 edges · 27 communities (22 shown, 5 thin omitted)
+- 305 nodes · 451 edges · 27 communities (22 shown, 5 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b95db45a`
+- Built from commit: `3907a130`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,8 +21,8 @@
 - What You Must Do When Invoked
 - dependencies
 - compilerOptions
-- types/index.ts
-- api.ts
+- Badge.tsx
+- DashboardSection.tsx
 - UCompensar — Sistema de Gestión de Trabajos de Grado
 - LoginScreen.tsx
 - graphify reference: extra exports and benchmark
@@ -38,28 +38,28 @@
 - extraction-spec.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `useAppStore` - 23 edges
-2. `cn()` - 18 edges
-3. `compilerOptions` - 18 edges
-4. `What You Must Do When Invoked` - 12 edges
-5. `/graphify` - 11 edges
-6. `Button()` - 10 edges
-7. `ApiError` - 10 edges
-8. `UCompensar — Sistema de Gestión de Trabajos de Grado` - 9 edges
-9. `Card()` - 8 edges
-10. `processesApi` - 8 edges
+1. `cn()` - 20 edges
+2. `compilerOptions` - 18 edges
+3. `What You Must Do When Invoked` - 12 edges
+4. `/graphify` - 11 edges
+5. `Button()` - 10 edges
+6. `useAppStore` - 9 edges
+7. `UCompensar — Sistema de Gestión de Trabajos de Grado` - 9 edges
+8. `Card()` - 8 edges
+9. `useThemeStore` - 8 edges
+10. `graphify reference: extra exports and benchmark` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `NavItem` --calls--> `cn()`  [EXTRACTED]
   src/components/layout/Sidebar.tsx → src/utils/cn.ts
-- `App()` --calls--> `useThemeStore`  [EXTRACTED]
-  src/App.tsx → src/stores/theme.store.ts
 - `LoginScreen()` --calls--> `cn()`  [EXTRACTED]
   src/components/auth/LoginScreen.tsx → src/utils/cn.ts
-- `DashboardSection()` --calls--> `useAppStore`  [EXTRACTED]
-  src/components/dashboard/DashboardSection.tsx → src/stores/app.store.ts
-- `DocumentosSection()` --calls--> `useAppStore`  [EXTRACTED]
-  src/components/documentos/DocumentosSection.tsx → src/stores/app.store.ts
+- `SidebarProps` --references--> `User`  [EXTRACTED]
+  src/components/layout/Sidebar.tsx → src/types/index.ts
+- `Sidebar()` --calls--> `cn()`  [EXTRACTED]
+  src/components/layout/Sidebar.tsx → src/utils/cn.ts
+- `TopbarProps` --references--> `NavSection`  [EXTRACTED]
+  src/components/layout/Topbar.tsx → src/types/index.ts
 
 ## Import Cycles
 - None detected.
@@ -67,12 +67,12 @@
 ## Communities (27 total, 5 thin omitted)
 
 ### Community 0 - "ui/index.ts"
-Cohesion: 0.11
-Nodes (29): CredentialsFormProps, NuevoTramiteSection(), TramitesSection(), AlertBanner(), AlertBannerProps, Badge(), BadgeProps, BadgeVariant (+21 more)
+Cohesion: 0.09
+Nodes (33): ReportesSection(), BuscarSection(), docList, NuevoTramiteSection(), TramitesSection(), AlertBanner(), AlertBannerProps, Badge() (+25 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.17
-Nodes (16): App(), LoginScreen(), DashboardLayout(), DashboardLayoutProps, sectionLabels, Topbar(), TopbarProps, BuscarSection() (+8 more)
+Cohesion: 0.14
+Nodes (21): App(), DashboardLayout(), DashboardLayoutProps, NAV_ITEMS, NavItem, NavItemProps, NavItemType, Sidebar() (+13 more)
 
 ### Community 2 - "devDependencies"
 Cohesion: 0.07
@@ -90,21 +90,21 @@ Nodes (24): clsx, lucide-react, dependencies, clsx, lucide-react, react, react-d
 Cohesion: 0.08
 Nodes (24): DOM, DOM.Iterable, ES2020, src, compilerOptions, allowImportingTsExtensions, baseUrl, isolatedModules (+16 more)
 
-### Community 6 - "types/index.ts"
-Cohesion: 0.10
-Nodes (19): AuthOverlay(), AuthOverlayProps, AUTH_STEPS, C, CARRERAS, ESTADO_LABELS, MODALIDADES, NAV_ITEMS (+11 more)
+### Community 6 - "Badge.tsx"
+Cohesion: 0.11
+Nodes (21): DocumentosSection(), BadgeProps, BadgeVariant, statusMap, TipoBadge(), variantMap, AuthMethod, AuthStep (+13 more)
 
-### Community 7 - "api.ts"
-Cohesion: 0.09
-Nodes (34): DashboardSection(), MODALITY_COLORS, DocumentosSection(), Row, STATUS_BADGE, MODALITY_COLORS, NEGATIVE_FINAL_STATES, ReportesSection() (+26 more)
+### Community 7 - "DashboardSection.tsx"
+Cohesion: 0.17
+Nodes (12): AuthOverlay(), AuthOverlayProps, DashboardSection(), DOCS, STEPS, TrazabilidadSection(), StatusBadge(), AUTH_STEPS (+4 more)
 
 ### Community 8 - "UCompensar — Sistema de Gestión de Trabajos de Grado"
 Cohesion: 0.14
 Nodes (13): Colores principales, Componentes UI, 🔑 Credenciales de Prueba (Demo), 📁 Estructura del Proyecto, 🔧 Extensión Recomendada (VS Code), 🚀 Instalación y Uso, 📄 Licencia, Pasos (+5 more)
 
 ### Community 9 - "LoginScreen.tsx"
-Cohesion: 0.11
-Nodes (19): CredentialsForm(), features, LoginPanel(), LoginScreenProps, TabType, SSOForm(), SSOFormProps, NAV_ITEMS (+11 more)
+Cohesion: 0.18
+Nodes (9): CredentialsForm(), CredentialsFormProps, features, LoginPanel(), LoginScreen(), LoginScreenProps, TabType, SSOForm() (+1 more)
 
 ### Community 10 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -131,23 +131,23 @@ Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
 ## Knowledge Gaps
-- **162 isolated node(s):** `name`, `version`, `private`, `description`, `dev` (+157 more)
+- **148 isolated node(s):** `name`, `version`, `private`, `description`, `dev` (+143 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `ui/index.ts` to `LoginScreen.tsx`, `App.tsx`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `cn()` connect `ui/index.ts` to `LoginScreen.tsx`, `App.tsx`, `Badge.tsx`?**
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `dependencies`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `useAppStore` connect `App.tsx` to `ui/index.ts`, `api.ts`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _162 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _148 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ui/index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.1076923076923077 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0927536231884058 - nodes in this community are weakly interconnected._
+- **Should `App.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.13793103448275862 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
 - **Should `What You Must Do When Invoked` be split into smaller, more focused modules?**

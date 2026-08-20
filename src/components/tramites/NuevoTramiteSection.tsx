@@ -1,36 +1,80 @@
-import { Card } from '@/components/ui'
-import { Button } from '@/components/ui'
-import { Badge } from '@/components/ui'
-import { Input, Select } from '@/components/ui/Input'
-import { MODALIDADES, CARRERAS, SEMESTRES } from '@/constants'
-import { cn } from '@/utils/cn'
-import { PlusCircle, Check } from 'lucide-react'
-import { useState } from 'react'
-
-const docList = [
-  { label: 'Anteproyecto aprobado', estado: 'cargado' as const },
-  { label: 'Carta aval del director', estado: 'pendiente' as const },
-  { label: 'Paz y salvo académico', estado: 'sin-cargar' as const },
-]
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Card, Button, Badge } from '@/components/ui'
+import { Select } from '@/components/ui/Input'
+import { useAppStore } from '@/stores/app.store'
+import { modalitiesApi, processesApi, ApiError, type ModalityOut, type RequiredDocumentOut } from '@/lib/api'
+import { PlusCircle } from 'lucide-react'
 
 export function NuevoTramiteSection() {
-  const [formData, setFormData] = useState({
-    cedula: '1020482311',
-    nombre: 'Laura Pinzón Sánchez',
-    carrera: 'Ingeniería de Sistemas',
-    semestre: '9.° semestre',
-    modalidad: 'Proyecto de grado',
-  })
+  const navigate = useNavigate()
+  const accessToken = useAppStore((s) => s.accessToken)
+  const currentUser = useAppStore((s) => s.currentUser)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+  const [modalities, setModalities] = useState<ModalityOut[]>([])
+  const [modalityId, setModalityId] = useState('')
+  const [academicSemester, setAcademicSemester] = useState('')
+  const [observations, setObservations] = useState('')
+  const [requiredDocs, setRequiredDocs] = useState<RequiredDocumentOut[]>([])
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!accessToken) return
+    modalitiesApi
+      .list(accessToken)
+      .then((mods) => {
+        setModalities(mods)
+        if (mods.length > 0) setModalityId(mods[0].public_id)
+      })
+      .catch((err) => setError(err instanceof ApiError ? err.message : 'No se pudieron cargar las modalidades'))
+      .finally(() => setIsLoading(false))
+  }, [accessToken])
+
+  useEffect(() => {
+    if (!accessToken || !modalityId) return
+    modalitiesApi
+      .get(accessToken, modalityId)
+      .then((detail) => setRequiredDocs(detail.required_documents))
+      .catch(() => setRequiredDocs([]))
+  }, [accessToken, modalityId])
+
+  const handleSubmit = async () => {
+    if (!accessToken || !modalityId || !academicSemester.trim()) {
+      setError('Selecciona una modalidad y escribe el semestre académico.')
+      return
+    }
+    setIsSubmitting(true)
+    setError(null)
+    try {
+      const process = await processesApi.create(accessToken, {
+        modality_public_id: modalityId,
+        academic_semester: academicSemester.trim(),
+        observations: observations.trim() || undefined,
+      })
+      navigate(`/trazabilidad/${process.public_id}`)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'No se pudo radicar el trámite')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (currentUser && currentUser.role !== 'estudiante') {
+    return (
+      <div className="max-w-[700px]">
+        <p className="text-sm text-[var(--color-text-dim)]">
+          Solo los estudiantes pueden radicar un nuevo trámite. Tu rol actual es <strong>{currentUser.role}</strong>.
+        </p>
+      </div>
+    )
   }
 
   return (
     <div className="animate-fade-in space-y-4 max-w-[700px]">
       <Card>
-        {/* Header */}
         <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-hover)] -mx-4 -mt-4 mb-6 px-5 py-4 rounded-t-xl flex items-center gap-2.5 shadow-md">
           <PlusCircle size={18} stroke="white" />
           <span className="text-[14px] font-bold text-white tracking-tight">
@@ -38,162 +82,90 @@ export function NuevoTramiteSection() {
           </span>
         </div>
 
-        {/* Personal Information */}
+        {error && (
+          <p className="mb-4 text-[12.5px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+            {error}
+          </p>
+        )}
+
         <div className="mb-6 pb-6 border-b border-neutral-border">
           <h3 className="text-[11px] font-bold text-neutral-muted uppercase tracking-wide mb-3.5">
-            Información Personal
+            Modalidad
           </h3>
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              label="Cédula"
-              name="cedula"
-              value={formData.cedula}
-              onChange={handleInputChange}
-            />
-            <Input
-              label="Nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleInputChange}
-            />
-          </div>
+          {isLoading ? (
+            <p className="text-[12.5px] text-[var(--color-text-dim)]">Cargando modalidades…</p>
+          ) : (
+            <Select
+              value={modalityId}
+              onChange={(e) => setModalityId(e.target.value)}
+              className="w-full"
+            >
+              {modalities.map((m) => (
+                <option key={m.public_id} value={m.public_id}>{m.name}</option>
+              ))}
+            </Select>
+          )}
         </div>
 
-        {/* Academic Information */}
         <div className="mb-6 pb-6 border-b border-neutral-border">
           <h3 className="text-[11px] font-bold text-neutral-muted uppercase tracking-wide mb-3.5">
-            Información Académica
+            Información académica
           </h3>
           <div className="flex flex-col gap-3">
-            {/* Carrera Selector */}
             <div>
               <label className="text-[9.5px] font-bold text-neutral-muted uppercase tracking-wide block mb-1">
-                Carrera
-              </label>
-              <Select
-                name="carrera"
-                value={formData.carrera}
-                onChange={handleInputChange}
-                className="w-full"
-              >
-                {CARRERAS.map((carrera) => (
-                  <option key={carrera} value={carrera}>
-                    {carrera}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            {/* Semestres Grid */}
-            <div>
-              <label className="text-[9.5px] font-bold text-neutral-muted uppercase tracking-wide block mb-3">
                 Semestre académico
               </label>
-              <div className="grid grid-cols-5 gap-2.5">
-                {SEMESTRES.map((sem) => {
-                  const num = sem.split('.')[0]
-                  const isActive = formData.semestre === sem
-                  return (
-                    <button
-                      key={sem}
-                      onClick={() =>
-                        setFormData((prev) => ({ ...prev, semestre: sem }))
-                      }
-                      className={cn(
-                        'py-3.5 px-2.5 rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center gap-1 group relative overflow-hidden cursor-pointer outline-none',
-                        isActive
-                          ? 'bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] text-white border-transparent shadow-[0_8px_20px_-6px_rgba(255,102,0,0.4)] scale-[1.03]'
-                          : 'bg-[var(--color-surface)] text-[var(--color-text)] border-[var(--color-border)] hover:border-[var(--color-primary)] hover:bg-[var(--color-bg)] hover:scale-[1.02]'
-                      )}
-                    >
-                      <span className={cn(
-                        'text-[18px] font-extrabold font-display leading-none transition-transform group-hover:scale-110',
-                        isActive ? 'text-white' : 'text-[var(--color-text)]'
-                      )}>
-                        {num}
-                      </span>
-                      <span className={cn(
-                        'text-[8px] uppercase tracking-wider font-bold transition-colors',
-                        isActive ? 'text-white/80' : 'text-[var(--color-text-dim)] group-hover:text-[var(--color-text-muted)]'
-                      )}>
-                        Semestre
-                      </span>
-                      {isActive && (
-                        <div className="absolute top-1 right-1.5 w-2 h-2 bg-white rounded-full ring-2 ring-[var(--color-primary)]" />
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
+              <input
+                value={academicSemester}
+                onChange={(e) => setAcademicSemester(e.target.value)}
+                placeholder="ej. 2026-2"
+                maxLength={10}
+                className="field-input w-full"
+              />
+            </div>
+            <div>
+              <label className="text-[9.5px] font-bold text-neutral-muted uppercase tracking-wide block mb-1">
+                Observaciones (opcional)
+              </label>
+              <textarea
+                value={observations}
+                onChange={(e) => setObservations(e.target.value)}
+                rows={2}
+                className="field-input resize-none w-full"
+              />
             </div>
           </div>
         </div>
 
-        {/* Modalidad */}
-        <div className="mb-6 pb-6 border-b border-neutral-border">
-          <h3 className="text-[11px] font-bold text-neutral-muted uppercase tracking-wide mb-3.5">
-            Tipo de Trámite
-          </h3>
-          <Select
-            name="modalidad"
-            value={formData.modalidad}
-            onChange={handleInputChange}
-            className="w-full"
-          >
-            {MODALIDADES.map((m) => (
-              <option key={m}>{m}</option>
-            ))}
-          </Select>
-        </div>
-
-        {/* Document checklist */}
+        {/* Required documents preview -- lo que exige la modalidad seleccionada */}
         <div className="mb-6">
           <h3 className="text-[11px] font-bold text-neutral-muted uppercase tracking-wide mb-3.5">
-            Documentos Requeridos
+            Documentos que necesitarás cargar
           </h3>
-          <div className="flex flex-col gap-2.5">
-            {docList.map((doc) => (
-              <div
-                key={doc.label}
-                className={cn(
-                  'flex items-center justify-between px-4 py-3 bg-neutral-bg rounded-xl border-l-[4px] transition-all duration-150',
-                  doc.estado === 'cargado' && 'border-l-[var(--color-teal)] bg-[var(--color-teal-soft)]',
-                  doc.estado === 'pendiente' && 'border-l-[var(--color-primary)] bg-[var(--color-primary-soft)]',
-                  doc.estado === 'sin-cargar' && 'border-l-[var(--color-border)]'
-                )}
-              >
-                <span className="text-[12px] font-medium text-neutral-text">{doc.label}</span>
-                {doc.estado === 'cargado' && <Badge variant="green">Cargado</Badge>}
-                {doc.estado === 'pendiente' && <Badge variant="orange">Pendiente</Badge>}
-                {doc.estado === 'sin-cargar' && <Badge variant="gray">Sin cargar</Badge>}
-              </div>
-            ))}
-          </div>
+          {requiredDocs.length === 0 ? (
+            <p className="text-[12px] text-[var(--color-text-dim)]">
+              Esta modalidad no tiene documentos requeridos configurados todavía.
+            </p>
+          ) : (
+            <div className="flex flex-col gap-2.5">
+              {requiredDocs.map((doc) => (
+                <div
+                  key={doc.public_id}
+                  className="flex items-center justify-between px-4 py-3 bg-neutral-bg rounded-xl border-l-[4px] border-l-[var(--color-border)]"
+                >
+                  <span className="text-[12px] font-medium text-neutral-text">{doc.document_type.name}</span>
+                  {doc.mandatory ? <Badge variant="orange">Obligatorio</Badge> : <Badge variant="gray">Opcional</Badge>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex gap-2 justify-end pt-4 border-t border-neutral-border">
-          <Button variant="outline" size="md" className="font-bold">
-            Guardar borrador
+          <Button size="md" className="font-bold" onClick={handleSubmit} disabled={isSubmitting || isLoading}>
+            {isSubmitting ? 'Radicando…' : 'Radicar trámite →'}
           </Button>
-          <Button size="md" className="font-bold">Enviar solicitud →</Button>
-        </div>
-      </Card>
-
-      {/* Form Summary */}
-      <Card className="bg-neutral-bg border-neutral-border">
-        <div className="text-[11px] space-y-1.5">
-          <div className="flex justify-between">
-            <span className="text-neutral-muted">Carrera:</span>
-            <span className="font-medium text-neutral-text">{formData.carrera}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-neutral-muted">Semestre:</span>
-            <span className="font-medium text-neutral-text">{formData.semestre}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-neutral-muted">Modalidad:</span>
-            <span className="font-medium text-neutral-text">{formData.modalidad}</span>
-          </div>
         </div>
       </Card>
     </div>
