@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Bell, Moon, Sun, Settings, LogOut, ChevronDown } from 'lucide-react'
+import { Search, Bell, Moon, Sun, Settings, LogOut } from 'lucide-react'
 import { useAppStore } from '@/stores/app.store'
 import { useThemeStore } from '@/stores/theme.store'
-import { cn } from '@/utils/cn'
 import type { NavSection } from '@/types'
 
 const sectionLabels: Record<NavSection, string> = {

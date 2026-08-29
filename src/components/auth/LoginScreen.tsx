@@ -4,7 +4,6 @@ import { SSOForm } from './SSOForm'
 import { CredentialsForm } from './CredentialsForm'
 import { Logo } from '@/components/ui/Logo'
 import { cn } from '@/utils/cn'
-import { useThemeStore } from '@/stores/theme.store'
 
 type TabType = 'sso' | 'credentials'
 

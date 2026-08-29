@@ -2,6 +2,7 @@
   "name": "ucompensar-gestion-grado",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Sistema de Gestión de Trabajos de Grado — UCompensar",
   "scripts": {
     "dev": "vite",
