@@ -12,6 +12,7 @@ const sectionLabels: Record<NavSection, string> = {
   buscar: 'Buscar por cédula',
   trazabilidad: 'Trazabilidad',
   documentos: 'Documentos',
+  comites: 'Comités',
   reportes: 'Reportes',
 }
 

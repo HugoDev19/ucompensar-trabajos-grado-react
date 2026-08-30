@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, FileText, Plus, Search, GitBranch,
-  FolderOpen, BarChart3, LogOut, ChevronRight, X,
+  FolderOpen, BarChart3, LogOut, ChevronRight, X, Gavel,
 } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
 import { canAccessSection } from '@/config/access'
@@ -24,6 +24,7 @@ const NAV_ITEMS: Array<{
   { id: 'buscar', label: 'Buscar cédula', Icon: Search, group: 'Principal', path: '/buscar' },
   { id: 'trazabilidad', label: 'Trazabilidad', Icon: GitBranch, group: 'Gestión', path: '/trazabilidad' },
   { id: 'documentos', label: 'Documentos', Icon: FolderOpen, group: 'Gestión', path: '/documentos' },
+  { id: 'comites', label: 'Comités', Icon: Gavel, group: 'Gestión', path: '/comites' },
   { id: 'reportes', label: 'Reportes', Icon: BarChart3, group: 'Gestión', path: '/reportes' },
 ]
 

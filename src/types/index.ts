@@ -7,6 +7,7 @@ export type NavSection =
   | 'trazabilidad'
   | 'documentos'
   | 'reportes'
+  | 'comites'
 
 // ─── Auth ─────────────────────────────────────────────────────
 export type AuthMethod = 'sso' | 'credentials'

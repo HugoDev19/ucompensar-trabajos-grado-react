@@ -15,6 +15,7 @@ import { BuscarSection } from '@/components/tramites/BuscarSection'
 import { TrazabilidadSection } from '@/components/trazabilidad/TrazabilidadSection'
 import { DocumentosSection } from '@/components/documentos/DocumentosSection'
 import { ReportesSection } from '@/components/reportes/ReportesSection'
+import { ComitesSection } from '@/components/comites/ComitesSection'
 
 export default function App() {
   const { isAuthenticated } = useAppStore()
@@ -65,6 +66,14 @@ export default function App() {
           <Route path="/trazabilidad" element={<TrazabilidadSection />} />
           <Route path="/trazabilidad/:processId" element={<TrazabilidadSection />} />
           <Route path="/documentos" element={<DocumentosSection />} />
+          <Route
+            path="/comites"
+            element={
+              <RequireSection section="comites">
+                <ComitesSection />
+              </RequireSection>
+            }
+          />
           <Route path="/reportes" element={<ReportesSection />} />
         </Route>
 

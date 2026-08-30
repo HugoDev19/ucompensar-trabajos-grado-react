@@ -13,6 +13,7 @@ export const NAV_ITEMS: Array<{
   { id: 'buscar', label: 'Buscar por cédula', group: 'principal', path: '/buscar' },
   { id: 'trazabilidad', label: 'Trazabilidad', group: 'gestion', path: '/trazabilidad' },
   { id: 'documentos', label: 'Documentos', group: 'gestion', path: '/documentos' },
+  { id: 'comites', label: 'Comités', group: 'gestion', path: '/comites' },
   { id: 'reportes', label: 'Reportes', group: 'gestion', path: '/reportes' },
 ]
 

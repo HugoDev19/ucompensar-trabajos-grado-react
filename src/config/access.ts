@@ -4,14 +4,15 @@ import type { NavSection } from '@/types'
 // tanto el menú (Sidebar, para no mostrar un link que va a fallar) como
 // el guard de rutas (RequireSection, para no dejar entrar por URL directa).
 //
-// Solo "nuevo" está restringido hoy porque es la única sección que el
-// backend también restringe explícitamente (POST /processes exige rol
-// "estudiante", ver app/domains/processes/router.py). El resto de
-// secciones son de solo lectura y el backend ya filtra qué ve cada quien
-// (ej. un estudiante solo ve sus propios trámites) sin necesitar ocultar
-// el menú entero.
+// El resto de secciones (aparte de las listadas acá) son de solo lectura
+// y el backend ya filtra qué ve cada quien (ej. un estudiante solo ve sus
+// propios trámites) sin necesitar ocultar el menú entero.
 export const SECTION_ROLES: Partial<Record<NavSection, string[]>> = {
+  // POST /processes exige "estudiante" (app/domains/processes/router.py)
   nuevo: ['estudiante'],
+  // GET/POST /committees exige "consejo_facultad" o "administrativo"
+  // (_RUN_SESSION_ROLES, app/domains/committees/router.py)
+  comites: ['consejo_facultad', 'administrativo'],
 }
 
 export function canAccessSection(section: NavSection, role: string): boolean {
