@@ -5,11 +5,19 @@ import {
   FolderOpen, BarChart3, LogOut, ChevronRight, X,
 } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
+import { canAccessSection } from '@/config/access'
 import { useThemeStore } from '@/stores/theme.store'
 import { cn } from '@/utils/cn'
-import type { User } from '@/types'
+import type { NavSection, User } from '@/types'
 
-const NAV_ITEMS = [
+const NAV_ITEMS: Array<{
+  id: NavSection
+  label: string
+  Icon: typeof LayoutDashboard
+  group: string
+  badge?: string
+  path: string
+}> = [
   { id: 'dashboard', label: 'Dashboard', Icon: LayoutDashboard, group: 'Principal', badge: '4', path: '/dashboard' },
   { id: 'tramites', label: 'Mis trámites', Icon: FileText, group: 'Principal', path: '/tramites' },
   { id: 'nuevo', label: 'Nuevo trámite', Icon: Plus, group: 'Principal', path: '/nuevo' },
@@ -111,7 +119,10 @@ export function Sidebar({ user, onLogout }: SidebarProps) {
             )}
             {collapsed && <div className="h-px bg-white/5 mx-2 mb-2" />}
             <div className="space-y-1">
-              {NAV_ITEMS.filter(n => n.group.toLowerCase() === group.toLowerCase()).map(item => (
+              {NAV_ITEMS
+                .filter(n => n.group.toLowerCase() === group.toLowerCase())
+                .filter(n => canAccessSection(n.id, user.role))
+                .map(item => (
                 <NavItem
                   key={item.id}
                   item={item}

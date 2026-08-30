@@ -4,7 +4,8 @@ import { Card, Button, Badge } from '@/components/ui'
 import { StatusBadge } from '@/components/ui/Badge'
 import { Input } from '@/components/ui/Input'
 import { useAppStore } from '@/stores/app.store'
-import { processesApi, ApiError, type ProcessOut } from '@/lib/api'
+import { ApiError } from '@/services/http'
+import { processesApi, type ProcessOut } from '@/services/processes.service'
 import { getInitials } from '@/utils/format'
 
 export function BuscarSection() {

@@ -3,16 +3,10 @@ import { useParams, Link } from 'react-router-dom'
 import { CheckCircle2, XCircle, Clock, Upload, FolderOpen, Send } from 'lucide-react'
 import { StatusBadge } from '@/components/ui/Badge'
 import { useAppStore } from '@/stores/app.store'
-import {
-  processesApi,
-  documentsApi,
-  workflowApi,
-  ApiError,
-  type ProcessOut,
-  type ProcessHistoryOut,
-  type ChecklistItemOut,
-  type AllowedTransitionOut,
-} from '@/lib/api'
+import { ApiError } from '@/services/http'
+import { documentsApi, type ChecklistItemOut } from '@/services/documents.service'
+import { processesApi, type ProcessOut, type ProcessHistoryOut } from '@/services/processes.service'
+import { workflowApi, type AllowedTransitionOut } from '@/services/workflow.service'
 import { formatRelativeDate } from '@/utils/format'
 
 const CHECKLIST_COLORS: Record<string, string> = {

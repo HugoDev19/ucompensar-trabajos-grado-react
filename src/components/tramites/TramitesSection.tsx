@@ -4,7 +4,10 @@ import { Card, Button } from '@/components/ui'
 import { StatusBadge } from '@/components/ui/Badge'
 import { Select } from '@/components/ui/Input'
 import { useAppStore } from '@/stores/app.store'
-import { processesApi, modalitiesApi, ApiError, type ProcessOut, type ModalityOut } from '@/lib/api'
+import { ApiError } from '@/services/http'
+import { modalitiesApi } from '@/services/modalities.service'
+import { processesApi, type ProcessOut } from '@/services/processes.service'
+import type { ModalityOut } from '@/types/api'
 
 export function TramitesSection() {
   const navigate = useNavigate()

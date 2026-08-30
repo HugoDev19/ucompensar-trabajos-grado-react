@@ -8,14 +8,15 @@ import { cn } from '@/utils/cn'
 type TabType = 'sso' | 'credentials'
 
 interface LoginScreenProps {
-  onLogin: () => void
   onCredentialsLogin: (email: string, password: string) => void
   isLoggingIn?: boolean
   loginError?: string | null
 }
 
-export function LoginScreen({ onLogin, onCredentialsLogin, isLoggingIn, loginError }: LoginScreenProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('sso')
+export function LoginScreen({ onCredentialsLogin, isLoggingIn, loginError }: LoginScreenProps) {
+  // 'credentials' por defecto -- es la única forma de entrar que de verdad
+  // funciona hoy (ver SSOForm: el SSO de Microsoft todavía no existe).
+  const [activeTab, setActiveTab] = useState<TabType>('credentials')
 
   return (
     <div className="flex h-screen min-h-[600px] bg-[var(--color-bg)] transition-colors duration-300">
@@ -61,10 +62,7 @@ export function LoginScreen({ onLogin, onCredentialsLogin, isLoggingIn, loginErr
 
           <div className="animate-in" key={activeTab}>
             {activeTab === 'sso' ? (
-              <SSOForm
-                onLogin={onLogin}
-                onSwitchToCredentials={() => setActiveTab('credentials')}
-              />
+              <SSOForm onSwitchToCredentials={() => setActiveTab('credentials')} />
             ) : (
               <CredentialsForm onSubmit={onCredentialsLogin} isLoading={isLoggingIn} error={loginError} />
             )}

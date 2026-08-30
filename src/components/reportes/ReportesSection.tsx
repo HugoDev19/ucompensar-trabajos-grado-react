@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Card, Button, MetricCard } from '@/components/ui'
 import { useAppStore } from '@/stores/app.store'
-import { processesApi, ApiError, type ProcessOut } from '@/lib/api'
+import { ApiError } from '@/services/http'
+import { processesApi, type ProcessOut } from '@/services/processes.service'
 import { parseUtc, daysSince } from '@/utils/format'
 
 const INACTIVITY_THRESHOLD_DAYS = 15

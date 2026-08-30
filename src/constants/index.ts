@@ -16,27 +16,6 @@ export const NAV_ITEMS: Array<{
   { id: 'reportes', label: 'Reportes', group: 'gestion', path: '/reportes' },
 ]
 
-export const AUTH_STEPS = [
-  'Verificando credenciales Microsoft',
-  'Consultando Azure AD UCompensar',
-  'Cargando perfil institucional',
-  'Redirigiendo al sistema...',
-]
-
-export const C = {
-  orange:  '#FF6600',
-  orangeH: '#E65C00',
-  orangeL: 'rgba(255, 102, 0, 0.1)',
-  green:   '#00adba',
-  greenM:  '#008E99',
-  greenL:  'rgba(0, 173, 186, 0.1)',
-  bg:      '#FDFDFD',
-  border:  '#E2E8F0',
-  text:    '#0F172A',
-  muted:   '#475569',
-  light:   '#FFFFFF',
-}
-
 export const MODALIDADES = [
   'Proyecto de grado',
   'Pasantía empresarial',

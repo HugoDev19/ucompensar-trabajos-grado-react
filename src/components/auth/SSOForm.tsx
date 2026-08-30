@@ -1,5 +1,4 @@
 interface SSOFormProps {
-  onLogin: () => void
   onSwitchToCredentials: () => void
 }
 
@@ -14,12 +13,19 @@ function MicrosoftIcon() {
   )
 }
 
-export function SSOForm({ onLogin, onSwitchToCredentials }: SSOFormProps) {
+// El backend todavía no tiene AzureADAuthProvider (bloqueado por
+// credenciales de TI, ver README del backend) -- este botón se deja
+// visible para que el equipo sepa que el SSO institucional está
+// planeado, pero deshabilitado para no fingir un login que no existe.
+export function SSOForm({ onSwitchToCredentials }: SSOFormProps) {
   return (
     <div>
       <button
-        onClick={onLogin}
-        className="w-full flex items-center justify-center gap-3 bg-white border-[1.5px] border-neutral-border rounded-xl px-5 py-3 cursor-pointer transition-all duration-[180ms] mb-4 hover:bg-[#F8F7F5] hover:border-[#B0ADA8] hover:-translate-y-px hover:shadow-card-hover group"
+        type="button"
+        disabled
+        title="Disponible próximamente"
+        aria-disabled="true"
+        className="w-full flex items-center justify-center gap-3 bg-white border-[1.5px] border-neutral-border rounded-xl px-5 py-3 mb-4 opacity-50 cursor-not-allowed"
       >
         <MicrosoftIcon />
         <div className="text-left">
@@ -27,7 +33,7 @@ export function SSOForm({ onLogin, onSwitchToCredentials }: SSOFormProps) {
             Continuar con Microsoft
           </div>
           <span className="text-[10px] text-neutral-muted">
-            cuenta @ucompensar.edu.co
+            Próximamente — usa tus credenciales por ahora
           </span>
         </div>
       </button>
@@ -44,27 +50,19 @@ export function SSOForm({ onLogin, onSwitchToCredentials }: SSOFormProps) {
           <path d="M8 7v5M8 5v1" stroke="var(--color-secondary)" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
         <p className="text-[10.5px] text-[var(--color-secondary)] leading-[1.5]">
-          Usa tu correo{' '}
-          <strong className="font-semibold">@ucompensar.edu.co</strong> — la
-          misma cuenta de Teams, Outlook y SharePoint.
+          El acceso con tu cuenta <strong className="font-semibold">@ucompensar.edu.co</strong>{' '}
+          (Teams, Outlook, SharePoint) todavía no está activo — mientras
+          tanto, entra con las credenciales que te dio la coordinación.
         </p>
       </div>
 
       <div className="mt-4 text-center">
-        <div className="text-[10.5px] text-neutral-muted mb-2">
-          Acceso externo
-        </div>
-        <div className="flex gap-2 justify-center">
-          {['Estudiante externo', 'Empresa aliada'].map((label) => (
-            <button
-              key={label}
-              onClick={onSwitchToCredentials}
-              className="flex-1 text-[10.5px] py-1.5 px-3 border border-neutral-border rounded-lg bg-white text-neutral-muted cursor-pointer hover:border-primary hover:text-primary transition-colors"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <button
+          onClick={onSwitchToCredentials}
+          className="text-[11px] py-1.5 px-4 border border-neutral-border rounded-lg bg-white text-neutral-muted cursor-pointer hover:border-primary hover:text-primary transition-colors"
+        >
+          Ir a inicio con credenciales
+        </button>
       </div>
     </div>
   )

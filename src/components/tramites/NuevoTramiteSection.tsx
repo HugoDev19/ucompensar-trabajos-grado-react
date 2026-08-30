@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { Card, Button, Badge } from '@/components/ui'
 import { Select } from '@/components/ui/Input'
 import { useAppStore } from '@/stores/app.store'
-import { modalitiesApi, processesApi, ApiError, type ModalityOut, type RequiredDocumentOut } from '@/lib/api'
+import { ApiError } from '@/services/http'
+import { modalitiesApi, type RequiredDocumentOut } from '@/services/modalities.service'
+import { processesApi } from '@/services/processes.service'
+import type { ModalityOut } from '@/types/api'
 import { PlusCircle } from 'lucide-react'
 
 export function NuevoTramiteSection() {

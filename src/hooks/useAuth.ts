@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/stores/app.store'
-import { authApi, ApiError } from '@/lib/api'
+import { ApiError } from '@/services/http'
+import { authApi } from '@/services/auth.service'
 
 function initials(fullName: string): string {
   return fullName
@@ -13,21 +14,10 @@ function initials(fullName: string): string {
 }
 
 export function useAuth() {
-  const { startAuth, finishAuth, loginSuccess, logout: storeLogout } = useAppStore()
+  const { loginSuccess, logout: storeLogout } = useAppStore()
   const navigate = useNavigate()
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null)
-
-  // Simulación de Microsoft SSO -- no hay AzureADAuthProvider todavía
-  // (bloqueado por credenciales de TI, ver README del backend).
-  const login = useCallback(() => {
-    startAuth()
-  }, [startAuth])
-
-  const handleAuthDone = useCallback(() => {
-    finishAuth()
-    navigate('/dashboard')
-  }, [finishAuth, navigate])
 
   const loginWithCredentials = useCallback(
     async (email: string, password: string) => {
@@ -61,5 +51,5 @@ export function useAuth() {
     navigate('/login')
   }, [storeLogout, navigate])
 
-  return { login, logout, handleAuthDone, loginWithCredentials, isLoggingIn, loginError }
+  return { logout, loginWithCredentials, isLoggingIn, loginError }
 }

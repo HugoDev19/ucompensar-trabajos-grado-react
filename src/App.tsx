@@ -4,7 +4,7 @@ import { useAppStore } from '@/stores/app.store'
 import { useThemeStore } from '@/stores/theme.store'
 import { useAuth } from '@/hooks/useAuth'
 import { LoginScreen } from '@/components/auth/LoginScreen'
-import { AuthOverlay } from '@/components/auth/AuthOverlay'
+import { RequireSection } from '@/components/auth/RequireSection'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 
 // Section imports
@@ -17,9 +17,9 @@ import { DocumentosSection } from '@/components/documentos/DocumentosSection'
 import { ReportesSection } from '@/components/reportes/ReportesSection'
 
 export default function App() {
-  const { isAuthenticated, isAuthenticating } = useAppStore()
+  const { isAuthenticated } = useAppStore()
   const { theme } = useThemeStore()
-  const { login, logout, handleAuthDone, loginWithCredentials, isLoggingIn, loginError } = useAuth()
+  const { logout, loginWithCredentials, isLoggingIn, loginError } = useAuth()
   const location = useLocation()
 
   useEffect(() => {
@@ -34,9 +34,6 @@ export default function App() {
 
   return (
     <>
-      {/* Auth overlay — self-contained animation, calls handleAuthDone when finished */}
-      {isAuthenticating && <AuthOverlay onDone={handleAuthDone} />}
-
       <Routes>
         {/* Public — Login */}
         <Route
@@ -45,7 +42,6 @@ export default function App() {
             isAuthenticated
               ? <Navigate to="/dashboard" replace />
               : <LoginScreen
-                  onLogin={login}
                   onCredentialsLogin={loginWithCredentials}
                   isLoggingIn={isLoggingIn}
                   loginError={loginError}
@@ -57,7 +53,14 @@ export default function App() {
         <Route element={<DashboardLayout onLogout={logout} />}>
           <Route path="/dashboard" element={<DashboardSection />} />
           <Route path="/tramites" element={<TramitesSection />} />
-          <Route path="/nuevo" element={<NuevoTramiteSection />} />
+          <Route
+            path="/nuevo"
+            element={
+              <RequireSection section="nuevo">
+                <NuevoTramiteSection />
+              </RequireSection>
+            }
+          />
           <Route path="/buscar" element={<BuscarSection />} />
           <Route path="/trazabilidad" element={<TrazabilidadSection />} />
           <Route path="/trazabilidad/:processId" element={<TrazabilidadSection />} />
