@@ -24,18 +24,30 @@ import { NotificacionesSection } from '@/components/notificaciones/Notificacione
 export default function App() {
   const { isAuthenticated } = useAppStore()
   const { theme } = useThemeStore()
-  const { logout, loginWithCredentials, isLoggingIn, loginError } = useAuth()
+  const { logout, loginWithCredentials, isLoggingIn, loginError, isRestoringSession } = useAuth()
   const location = useLocation()
 
   useEffect(() => {
     // For institucional branding, the login screen is always light
     const isLogin = location.pathname === '/login'
     const activeTheme = isLogin ? 'light' : theme
-    
+
     const root = window.document.documentElement
     root.classList.remove('light', 'dark')
     root.classList.add(activeTheme)
   }, [theme, location.pathname])
+
+  // Mientras se intenta restaurar la sesión (ver useAuth), no renderizar
+  // las rutas todavía: si no, alguien con una cookie de refresh válida
+  // vería un parpadeo a /login antes de que la restauración termine y lo
+  // mande de vuelta a /dashboard.
+  if (isRestoringSession) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-[var(--color-bg)]">
+        <p className="text-[12.5px] text-[var(--color-text-dim)]">Cargando…</p>
+      </div>
+    )
+  }
 
   return (
     <>

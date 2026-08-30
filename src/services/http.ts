@@ -29,6 +29,10 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
   const isFormData = options.body instanceof FormData
   try {
     res = await fetch(`${API_URL}${path}`, {
+      // Necesario para que el navegador mande/reciba la cookie HttpOnly de
+      // refresh_token (ver auth.service.ts) -- sin esto, cross-origin
+      // (Vercel <-> Render) el navegador ni siquiera intenta adjuntarla.
+      credentials: 'include',
       ...options,
       headers: {
         ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
@@ -43,6 +47,12 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     const body = await res.json().catch(() => null)
     const detail = typeof body?.detail === 'string' ? body.detail : 'Error de conexión con el servidor'
     throw new ApiError(res.status, detail)
+  }
+
+  // 204 (ej. /auth/logout) no trae body -- res.json() reventaría con
+  // "Unexpected end of JSON input" si se llama sobre una respuesta vacía.
+  if (res.status === 204) {
+    return undefined as T
   }
 
   return res.json() as Promise<T>
