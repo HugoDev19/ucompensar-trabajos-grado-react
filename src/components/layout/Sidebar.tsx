@@ -1,36 +1,12 @@
 import { memo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import {
-  LayoutDashboard, FileText, Plus, Search, GitBranch,
-  FolderOpen, BarChart3, LogOut, ChevronRight, X, Gavel, Building2, Globe2, GraduationCap, Bell,
-} from 'lucide-react'
+import { LogOut, ChevronRight, X } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
 import { canAccessSection } from '@/config/access'
+import { NAV_ITEMS } from '@/constants'
 import { useThemeStore } from '@/stores/theme.store'
 import { cn } from '@/utils/cn'
-import type { NavSection, User } from '@/types'
-
-const NAV_ITEMS: Array<{
-  id: NavSection
-  label: string
-  Icon: typeof LayoutDashboard
-  group: string
-  badge?: string
-  path: string
-}> = [
-  { id: 'dashboard', label: 'Dashboard', Icon: LayoutDashboard, group: 'Principal', badge: '4', path: '/dashboard' },
-  { id: 'tramites', label: 'Mis trámites', Icon: FileText, group: 'Principal', path: '/tramites' },
-  { id: 'nuevo', label: 'Nuevo trámite', Icon: Plus, group: 'Principal', path: '/nuevo' },
-  { id: 'buscar', label: 'Buscar cédula', Icon: Search, group: 'Principal', path: '/buscar' },
-  { id: 'trazabilidad', label: 'Trazabilidad', Icon: GitBranch, group: 'Gestión', path: '/trazabilidad' },
-  { id: 'documentos', label: 'Documentos', Icon: FolderOpen, group: 'Gestión', path: '/documentos' },
-  { id: 'comites', label: 'Comités', Icon: Gavel, group: 'Gestión', path: '/comites' },
-  { id: 'administrativo', label: 'Áreas administrativas', Icon: Building2, group: 'Gestión', path: '/administrativo' },
-  { id: 'externo', label: 'Entidades externas', Icon: Globe2, group: 'Gestión', path: '/externo' },
-  { id: 'calificaciones', label: 'Calificaciones', Icon: GraduationCap, group: 'Gestión', path: '/calificaciones' },
-  { id: 'notificaciones', label: 'Notificaciones', Icon: Bell, group: 'Gestión', path: '/notificaciones' },
-  { id: 'reportes', label: 'Reportes', Icon: BarChart3, group: 'Gestión', path: '/reportes' },
-]
+import type { User } from '@/types'
 
 type NavItemType = typeof NAV_ITEMS[0]
 

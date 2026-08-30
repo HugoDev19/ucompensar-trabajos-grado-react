@@ -1,24 +1,34 @@
+import {
+  LayoutDashboard, FileText, Plus, Search, GitBranch,
+  FolderOpen, BarChart3, Gavel, Building2, Globe2, GraduationCap, Bell,
+} from 'lucide-react'
 import type { NavSection } from '@/types'
 
+// Fuente unica de verdad para el menu -- la usan tanto Sidebar (para
+// pintar los links) como DashboardLayout (para derivar activeSection
+// del path actual). Antes vivian dos arreglos separados y se
+// desincronizaban (ej. la etiqueta de "buscar" quedo distinta en cada
+// copia); mantenerlo en un solo lugar evita ese drift.
 export const NAV_ITEMS: Array<{
   id: NavSection
   label: string
-  group: 'principal' | 'gestion'
+  Icon: typeof LayoutDashboard
+  group: 'Principal' | 'Gestión'
   path: string
-  badge?: number
+  badge?: string
 }> = [
-  { id: 'dashboard', label: 'Dashboard', group: 'principal', path: '/dashboard', badge: 4 },
-  { id: 'tramites', label: 'Mis trámites', group: 'principal', path: '/tramites' },
-  { id: 'nuevo', label: 'Nuevo trámite', group: 'principal', path: '/nuevo' },
-  { id: 'buscar', label: 'Buscar por cédula', group: 'principal', path: '/buscar' },
-  { id: 'trazabilidad', label: 'Trazabilidad', group: 'gestion', path: '/trazabilidad' },
-  { id: 'documentos', label: 'Documentos', group: 'gestion', path: '/documentos' },
-  { id: 'comites', label: 'Comités', group: 'gestion', path: '/comites' },
-  { id: 'administrativo', label: 'Áreas administrativas', group: 'gestion', path: '/administrativo' },
-  { id: 'externo', label: 'Entidades externas', group: 'gestion', path: '/externo' },
-  { id: 'calificaciones', label: 'Calificaciones', group: 'gestion', path: '/calificaciones' },
-  { id: 'notificaciones', label: 'Notificaciones', group: 'gestion', path: '/notificaciones' },
-  { id: 'reportes', label: 'Reportes', group: 'gestion', path: '/reportes' },
+  { id: 'dashboard', label: 'Dashboard', Icon: LayoutDashboard, group: 'Principal', badge: '4', path: '/dashboard' },
+  { id: 'tramites', label: 'Mis trámites', Icon: FileText, group: 'Principal', path: '/tramites' },
+  { id: 'nuevo', label: 'Nuevo trámite', Icon: Plus, group: 'Principal', path: '/nuevo' },
+  { id: 'buscar', label: 'Buscar cédula', Icon: Search, group: 'Principal', path: '/buscar' },
+  { id: 'trazabilidad', label: 'Trazabilidad', Icon: GitBranch, group: 'Gestión', path: '/trazabilidad' },
+  { id: 'documentos', label: 'Documentos', Icon: FolderOpen, group: 'Gestión', path: '/documentos' },
+  { id: 'comites', label: 'Comités', Icon: Gavel, group: 'Gestión', path: '/comites' },
+  { id: 'administrativo', label: 'Áreas administrativas', Icon: Building2, group: 'Gestión', path: '/administrativo' },
+  { id: 'externo', label: 'Entidades externas', Icon: Globe2, group: 'Gestión', path: '/externo' },
+  { id: 'calificaciones', label: 'Calificaciones', Icon: GraduationCap, group: 'Gestión', path: '/calificaciones' },
+  { id: 'notificaciones', label: 'Notificaciones', Icon: Bell, group: 'Gestión', path: '/notificaciones' },
+  { id: 'reportes', label: 'Reportes', Icon: BarChart3, group: 'Gestión', path: '/reportes' },
 ]
 
 export const MODALIDADES = [
