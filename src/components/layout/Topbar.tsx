@@ -13,6 +13,7 @@ const sectionLabels: Record<NavSection, string> = {
   trazabilidad: 'Trazabilidad',
   documentos: 'Documentos',
   comites: 'Comités',
+  administrativo: 'Áreas administrativas',
   reportes: 'Reportes',
 }
 

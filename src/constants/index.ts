@@ -14,6 +14,7 @@ export const NAV_ITEMS: Array<{
   { id: 'trazabilidad', label: 'Trazabilidad', group: 'gestion', path: '/trazabilidad' },
   { id: 'documentos', label: 'Documentos', group: 'gestion', path: '/documentos' },
   { id: 'comites', label: 'Comités', group: 'gestion', path: '/comites' },
+  { id: 'administrativo', label: 'Áreas administrativas', group: 'gestion', path: '/administrativo' },
   { id: 'reportes', label: 'Reportes', group: 'gestion', path: '/reportes' },
 ]
 
