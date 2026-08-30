@@ -16,6 +16,7 @@ export const NAV_ITEMS: Array<{
   { id: 'comites', label: 'Comités', group: 'gestion', path: '/comites' },
   { id: 'administrativo', label: 'Áreas administrativas', group: 'gestion', path: '/administrativo' },
   { id: 'externo', label: 'Entidades externas', group: 'gestion', path: '/externo' },
+  { id: 'calificaciones', label: 'Calificaciones', group: 'gestion', path: '/calificaciones' },
   { id: 'reportes', label: 'Reportes', group: 'gestion', path: '/reportes' },
 ]
 

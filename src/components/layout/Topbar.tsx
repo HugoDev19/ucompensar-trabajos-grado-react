@@ -15,6 +15,7 @@ const sectionLabels: Record<NavSection, string> = {
   comites: 'Comités',
   administrativo: 'Áreas administrativas',
   externo: 'Entidades externas',
+  calificaciones: 'Calificaciones',
   reportes: 'Reportes',
 }
 

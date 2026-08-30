@@ -18,6 +18,7 @@ import { ReportesSection } from '@/components/reportes/ReportesSection'
 import { ComitesSection } from '@/components/comites/ComitesSection'
 import { AdministrativoSection } from '@/components/administrativo/AdministrativoSection'
 import { ExternoSection } from '@/components/externo/ExternoSection'
+import { CalificacionesSection } from '@/components/calificaciones/CalificacionesSection'
 
 export default function App() {
   const { isAuthenticated } = useAppStore()
@@ -78,6 +79,7 @@ export default function App() {
           />
           <Route path="/administrativo" element={<AdministrativoSection />} />
           <Route path="/externo" element={<ExternoSection />} />
+          <Route path="/calificaciones" element={<CalificacionesSection />} />
           <Route path="/reportes" element={<ReportesSection />} />
         </Route>
 

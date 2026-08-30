@@ -9,8 +9,17 @@ export interface RequiredDocumentOut {
   sort_order: number
 }
 
+export interface EvaluationCriterionOut {
+  public_id: string
+  name: string
+  weight_percentage: number
+  is_inclusion_requirement: boolean
+  sort_order: number
+}
+
 export interface ModalityDetail extends ModalityOut {
   required_documents: RequiredDocumentOut[]
+  criteria: EvaluationCriterionOut[]
 }
 
 export const modalitiesApi = {
