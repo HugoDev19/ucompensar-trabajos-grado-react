@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Search, Bell, Moon, Sun, Settings, LogOut } from 'lucide-react'
 import { useAppStore } from '@/stores/app.store'
 import { useThemeStore } from '@/stores/theme.store'
@@ -23,14 +22,14 @@ const sectionLabels: Record<NavSection, string> = {
 interface TopbarProps {
   activeSection: NavSection
   onNewTramite: () => void
+  onLogout: () => void
   searchQuery: string
   onSearchChange: (q: string) => void
 }
 
-export function Topbar({ activeSection, searchQuery, onSearchChange }: TopbarProps) {
-  const navigate = useNavigate()
+export function Topbar({ activeSection, onLogout, searchQuery, onSearchChange }: TopbarProps) {
   const { theme, toggle } = useThemeStore()
-  const { currentUser, logout } = useAppStore()
+  const { currentUser } = useAppStore()
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -46,8 +45,7 @@ export function Topbar({ activeSection, searchQuery, onSearchChange }: TopbarPro
   }, [])
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
+    onLogout()
   }
 
   return (

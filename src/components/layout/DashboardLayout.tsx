@@ -31,6 +31,7 @@ export function DashboardLayout({ onLogout }: DashboardLayoutProps) {
         <Topbar
           activeSection={activeSection}
           onNewTramite={() => navigate('/nuevo')}
+          onLogout={onLogout}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
