@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, FileText, Plus, Search, GitBranch,
-  FolderOpen, BarChart3, LogOut, ChevronRight, X, Gavel, Building2,
+  FolderOpen, BarChart3, LogOut, ChevronRight, X, Gavel, Building2, Globe2,
 } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
 import { canAccessSection } from '@/config/access'
@@ -26,6 +26,7 @@ const NAV_ITEMS: Array<{
   { id: 'documentos', label: 'Documentos', Icon: FolderOpen, group: 'Gestión', path: '/documentos' },
   { id: 'comites', label: 'Comités', Icon: Gavel, group: 'Gestión', path: '/comites' },
   { id: 'administrativo', label: 'Áreas administrativas', Icon: Building2, group: 'Gestión', path: '/administrativo' },
+  { id: 'externo', label: 'Entidades externas', Icon: Globe2, group: 'Gestión', path: '/externo' },
   { id: 'reportes', label: 'Reportes', Icon: BarChart3, group: 'Gestión', path: '/reportes' },
 ]
 

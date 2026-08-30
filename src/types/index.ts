@@ -9,6 +9,7 @@ export type NavSection =
   | 'reportes'
   | 'comites'
   | 'administrativo'
+  | 'externo'
 
 // ─── Auth ─────────────────────────────────────────────────────
 export type AuthMethod = 'sso' | 'credentials'
