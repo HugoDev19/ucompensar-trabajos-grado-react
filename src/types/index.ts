@@ -11,6 +11,7 @@ export type NavSection =
   | 'administrativo'
   | 'externo'
   | 'calificaciones'
+  | 'notificaciones'
 
 // ─── Auth ─────────────────────────────────────────────────────
 export type AuthMethod = 'sso' | 'credentials'

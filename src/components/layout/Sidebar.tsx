@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, FileText, Plus, Search, GitBranch,
-  FolderOpen, BarChart3, LogOut, ChevronRight, X, Gavel, Building2, Globe2, GraduationCap,
+  FolderOpen, BarChart3, LogOut, ChevronRight, X, Gavel, Building2, Globe2, GraduationCap, Bell,
 } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
 import { canAccessSection } from '@/config/access'
@@ -28,6 +28,7 @@ const NAV_ITEMS: Array<{
   { id: 'administrativo', label: 'Áreas administrativas', Icon: Building2, group: 'Gestión', path: '/administrativo' },
   { id: 'externo', label: 'Entidades externas', Icon: Globe2, group: 'Gestión', path: '/externo' },
   { id: 'calificaciones', label: 'Calificaciones', Icon: GraduationCap, group: 'Gestión', path: '/calificaciones' },
+  { id: 'notificaciones', label: 'Notificaciones', Icon: Bell, group: 'Gestión', path: '/notificaciones' },
   { id: 'reportes', label: 'Reportes', Icon: BarChart3, group: 'Gestión', path: '/reportes' },
 ]
 

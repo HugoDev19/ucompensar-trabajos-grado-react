@@ -17,6 +17,7 @@ export const NAV_ITEMS: Array<{
   { id: 'administrativo', label: 'Áreas administrativas', group: 'gestion', path: '/administrativo' },
   { id: 'externo', label: 'Entidades externas', group: 'gestion', path: '/externo' },
   { id: 'calificaciones', label: 'Calificaciones', group: 'gestion', path: '/calificaciones' },
+  { id: 'notificaciones', label: 'Notificaciones', group: 'gestion', path: '/notificaciones' },
   { id: 'reportes', label: 'Reportes', group: 'gestion', path: '/reportes' },
 ]
 
