@@ -24,6 +24,8 @@ function toStoreUser(user: BackendUser) {
   }
 }
 
+const SESSION_FLAG_KEY = 'ucomp_has_session'
+
 export function useAuth() {
   const { loginSuccess, logout: storeLogout } = useAppStore()
   const navigate = useNavigate()
@@ -39,15 +41,26 @@ export function useAuth() {
 
   useEffect(() => {
     let cancelled = false
+
+    // Si no hay indicio de sesión previa en este navegador, no se llama a
+    // /auth/refresh para evitar disparar una petición 401 innecesaria.
+    if (localStorage.getItem(SESSION_FLAG_KEY) !== 'true') {
+      setIsRestoringSession(false)
+      return
+    }
+
     authApi
       .refresh()
       .then(async (tokens) => {
         const user = await authApi.me(tokens.access_token)
-        if (!cancelled) loginSuccess(toStoreUser(user), tokens.access_token)
+        if (!cancelled) {
+          localStorage.setItem(SESSION_FLAG_KEY, 'true')
+          loginSuccess(toStoreUser(user), tokens.access_token)
+        }
       })
       .catch(() => {
-        // Sin cookie o ya expiró (7 días) -- se queda deslogueado, es lo
-        // esperado, no un error que mostrar.
+        // Sin cookie o ya expiró (7 días) -- limpiar bandera y dejar deslogueado
+        localStorage.removeItem(SESSION_FLAG_KEY)
       })
       .finally(() => {
         if (!cancelled) setIsRestoringSession(false)
@@ -64,6 +77,7 @@ export function useAuth() {
       try {
         const tokens = await authApi.login(email, password)
         const user = await authApi.me(tokens.access_token)
+        localStorage.setItem(SESSION_FLAG_KEY, 'true')
         loginSuccess(toStoreUser(user), tokens.access_token)
         navigate('/dashboard')
       } catch (err) {
@@ -76,6 +90,7 @@ export function useAuth() {
   )
 
   const logout = useCallback(() => {
+    localStorage.removeItem(SESSION_FLAG_KEY)
     storeLogout()
     navigate('/login')
     authApi.logout().catch(() => {

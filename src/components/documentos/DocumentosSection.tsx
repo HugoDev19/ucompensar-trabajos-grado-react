@@ -1,12 +1,13 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, useMemo } from 'react'
 import { Card, Button, Badge } from '@/components/ui'
-import { Check, X, ShieldCheck } from 'lucide-react'
+import { Check, X, ShieldCheck, Eye, Download, Search, Filter, RefreshCw } from 'lucide-react'
 import { canReviewDocuments } from '@/config/access'
 import { useAppStore } from '@/stores/app.store'
 import { ApiError, resolveFileUrl } from '@/services/http'
 import { documentsApi, type ProcessDocumentOut } from '@/services/documents.service'
 import { processesApi } from '@/services/processes.service'
 import { formatRelativeDate } from '@/utils/format'
+import { DocumentViewerModal, type ViewerDocument } from './DocumentViewerModal'
 
 interface Row extends ProcessDocumentOut {
   studentName: string
@@ -27,15 +28,22 @@ export function DocumentosSection() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fila en la que se está confirmando un rechazo (con su comentario) --
-  // solo una a la vez, es la interacción más simple sin meter un modal
-  // nuevo solo para esto.
+  // Filters & search
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState<'todos' | ProcessDocumentOut['status']>('todos')
+  const [typeFilter, setTypeFilter] = useState<string>('todos')
+
+  // Document Viewer Modal state
+  const [activeViewerDoc, setActiveViewerDoc] = useState<ViewerDocument | null>(null)
+  const [isViewerOpen, setIsViewerOpen] = useState(false)
+
+  // Fila en la que se está confirmando un rechazo (con su comentario)
   const [rejectingId, setRejectingId] = useState<string | null>(null)
   const [rejectComment, setRejectComment] = useState('')
   const [reviewingId, setReviewingId] = useState<string | null>(null)
   const [reviewError, setReviewError] = useState<string | null>(null)
 
-  useEffect(() => {
+  const loadDocuments = () => {
     if (!accessToken) return
     setIsLoading(true)
     setError(null)
@@ -53,15 +61,56 @@ export function DocumentosSection() {
       })
       .catch((err) => setError(err instanceof ApiError ? err.message : 'No se pudieron cargar los documentos'))
       .finally(() => setIsLoading(false))
+  }
+
+  useEffect(() => {
+    loadDocuments()
   }, [accessToken])
 
-  async function handleApprove(doc: Row) {
-    if (!accessToken) return
+  // Unique document types for filter
+  const documentTypes = useMemo(() => {
+    const types = new Set(rows.map((r) => r.document_type.name))
+    return Array.from(types)
+  }, [rows])
+
+  // Filtered rows
+  const filteredRows = useMemo(() => {
+    return rows.filter((r) => {
+      const matchesSearch =
+        r.file_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        r.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        r.document_type.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+      const matchesStatus = statusFilter === 'todos' || r.status === statusFilter
+      const matchesType = typeFilter === 'todos' || r.document_type.name === typeFilter
+
+      return matchesSearch && matchesStatus && matchesType
+    })
+  }, [rows, searchTerm, statusFilter, typeFilter])
+
+  const openViewer = (doc: Row) => {
+    setActiveViewerDoc({
+      public_id: doc.public_id,
+      file_name: doc.file_name,
+      download_url: doc.download_url,
+      studentName: doc.studentName,
+      documentType: doc.document_type.name,
+      version: doc.version,
+      status: doc.status,
+    })
+    setIsViewerOpen(true)
+  }
+
+  async function handleApprove(doc: { public_id?: string }) {
+    if (!accessToken || !doc.public_id) return
     setReviewError(null)
     setReviewingId(doc.public_id)
     try {
       const updated = await documentsApi.review(accessToken, doc.public_id, 'aprobado')
       setRows((prev) => prev.map((r) => (r.public_id === doc.public_id ? { ...r, ...updated } : r)))
+      if (activeViewerDoc?.public_id === doc.public_id) {
+        setActiveViewerDoc((prev) => (prev ? { ...prev, status: 'aprobado' } : null))
+      }
     } catch (err) {
       setReviewError(err instanceof ApiError ? err.message : 'No se pudo aprobar el documento')
     } finally {
@@ -69,15 +118,24 @@ export function DocumentosSection() {
     }
   }
 
-  async function handleReject(doc: Row) {
-    if (!accessToken) return
+  async function handleReject(doc: { public_id?: string }, customComment?: string) {
+    if (!accessToken || !doc.public_id) return
+    const commentToSend = customComment ?? rejectComment
     setReviewError(null)
     setReviewingId(doc.public_id)
     try {
-      const updated = await documentsApi.review(accessToken, doc.public_id, 'rechazado', rejectComment.trim() || undefined)
+      const updated = await documentsApi.review(
+        accessToken,
+        doc.public_id,
+        'rechazado',
+        commentToSend.trim() || undefined
+      )
       setRows((prev) => prev.map((r) => (r.public_id === doc.public_id ? { ...r, ...updated } : r)))
       setRejectingId(null)
       setRejectComment('')
+      if (activeViewerDoc?.public_id === doc.public_id) {
+        setActiveViewerDoc((prev) => (prev ? { ...prev, status: 'rechazado' } : null))
+      }
     } catch (err) {
       setReviewError(err instanceof ApiError ? err.message : 'No se pudo rechazar el documento')
     } finally {
@@ -88,20 +146,81 @@ export function DocumentosSection() {
   return (
     <div className="animate-in">
       <Card className="p-0 overflow-hidden">
-        <div className="px-6 py-5 border-b border-[var(--color-border)] bg-[var(--color-bg)]/30 flex items-center justify-between">
+        {/* Header */}
+        <div className="px-6 py-5 border-b border-[var(--color-border)] bg-[var(--color-bg)]/30 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-[16px] font-bold text-[var(--color-text)] tracking-tight">Documentos</h2>
+            <h2 className="text-[16px] font-bold text-[var(--color-text)] tracking-tight">Repositorio de Documentos</h2>
             <p className="text-[12px] text-[var(--color-text-muted)] mt-0.5">
-              Documentos cargados en todos los trámites visibles para tu rol
+              Visualiza, revisa y gestiona los documentos académicos cargados en los trámites
             </p>
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadDocuments}
+            disabled={isLoading}
+            className="font-bold flex items-center gap-1.5"
+            title="Recargar lista"
+          >
+            <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} /> Actualizar
+          </Button>
         </div>
 
+        {/* Security Banner */}
         <div className="mx-6 mt-5 mb-4 flex items-center gap-3 px-4 py-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl">
-          <ShieldCheck size={16} className="text-[var(--color-text-dim)] flex-shrink-0" />
-          <span className="text-[12px] text-[var(--color-text-muted)] font-bold">
-            Almacenamiento privado en Cloudflare R2 · cada descarga usa un enlace firmado con vencimiento
+          <ShieldCheck size={16} className="text-[var(--color-primary)] flex-shrink-0" />
+          <span className="text-[12px] text-[var(--color-text-muted)] font-medium">
+            Almacenamiento seguro en Cloudflare R2 · Visualización en vivo y descargas con enlaces firmados
           </span>
+        </div>
+
+        {/* Search and Filters Bar */}
+        <div className="mx-6 mb-5 flex flex-wrap items-center justify-between gap-3">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-dim)]" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar por archivo, estudiante o tipo…"
+              className="w-full pl-9 pr-3 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl text-[12.5px] text-[var(--color-text)] outline-none focus:border-[var(--color-primary)] transition-all"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-2.5 py-1.5 text-[12px]">
+              <Filter size={13} className="text-[var(--color-text-dim)]" />
+              <span className="text-[var(--color-text-dim)] font-medium">Estado:</span>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as any)}
+                className="bg-transparent text-[var(--color-text)] font-semibold outline-none cursor-pointer text-[12px]"
+              >
+                <option value="todos">Todos</option>
+                <option value="pendiente">Pendientes</option>
+                <option value="aprobado">Aprobados</option>
+                <option value="rechazado">Rechazados</option>
+              </select>
+            </div>
+
+            {documentTypes.length > 0 && (
+              <div className="flex items-center gap-1.5 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-2.5 py-1.5 text-[12px]">
+                <span className="text-[var(--color-text-dim)] font-medium">Tipo:</span>
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="bg-transparent text-[var(--color-text)] font-semibold outline-none cursor-pointer text-[12px] max-w-[150px] truncate"
+                >
+                  <option value="todos">Todos los tipos</option>
+                  {documentTypes.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
         </div>
 
         {error && (
@@ -115,48 +234,99 @@ export function DocumentosSection() {
           </p>
         )}
 
+        {/* Table */}
         <div className="overflow-x-auto scrollbar-premium">
           {isLoading ? (
             <p className="px-6 py-8 text-[12.5px] text-[var(--color-text-dim)]">Cargando documentos…</p>
-          ) : rows.length === 0 ? (
-            <p className="px-6 py-8 text-[12.5px] text-[var(--color-text-dim)]">
-              Nadie ha cargado documentos todavía. Súbelos desde la trazabilidad de un trámite.
-            </p>
+          ) : filteredRows.length === 0 ? (
+            <div className="px-6 py-12 text-center">
+              <p className="text-[13px] font-medium text-[var(--color-text-muted)]">
+                {rows.length === 0
+                  ? 'Nadie ha cargado documentos todavía. Súbelos desde la trazabilidad de un trámite.'
+                  : 'No se encontraron documentos con los filtros aplicados.'}
+              </p>
+              {rows.length > 0 && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('')
+                    setStatusFilter('todos')
+                    setTypeFilter('todos')
+                  }}
+                  className="mt-2 text-[12px] text-[var(--color-primary)] font-bold hover:underline"
+                >
+                  Limpiar filtros
+                </button>
+              )}
+            </div>
           ) : (
             <table className="w-full border-collapse">
               <thead>
                 <tr>
                   {['Archivo', 'Estudiante', 'Tipo', 'Estado', 'Fecha', 'Acciones'].map((h) => (
-                    <th key={h} className="th">{h}</th>
+                    <th key={h} className="th">
+                      {h}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {rows.map((doc) => (
+                {filteredRows.map((doc) => (
                   <Fragment key={doc.public_id}>
-                    <tr className="group">
-                      <td className="td font-bold text-[var(--color-text)]">{doc.file_name}</td>
+                    <tr className="group hover:bg-[var(--color-bg)]/40 transition-colors">
+                      <td className="td font-bold text-[var(--color-text)]">
+                        <button
+                          onClick={() => openViewer(doc)}
+                          className="hover:text-[var(--color-primary)] transition-colors text-left flex items-center gap-1.5 group/name"
+                          title="Click para previsualizar"
+                        >
+                          <span className="truncate max-w-xs">{doc.file_name}</span>
+                          <span className="text-[10px] font-bold text-[var(--color-text-dim)] bg-[var(--color-bg)] px-1 py-0.5 rounded border border-[var(--color-border)]">
+                            v{doc.version}
+                          </span>
+                        </button>
+                      </td>
                       <td className="td text-[var(--color-text-muted)]">{doc.studentName}</td>
                       <td className="td text-[var(--color-text-muted)]">{doc.document_type.name}</td>
-                      <td className="td"><Badge variant={STATUS_BADGE[doc.status].variant}>{STATUS_BADGE[doc.status].label}</Badge></td>
-                      <td className="td text-[var(--color-text-dim)] font-medium">{formatRelativeDate(doc.uploaded_at)}</td>
+                      <td className="td">
+                        <Badge variant={STATUS_BADGE[doc.status].variant}>{STATUS_BADGE[doc.status].label}</Badge>
+                      </td>
+                      <td className="td text-[var(--color-text-dim)] font-medium">
+                        {formatRelativeDate(doc.uploaded_at)}
+                      </td>
                       <td className="td">
                         <div className="flex items-center gap-2">
+                          {/* Botón Principal: Ver en Modal */}
                           <Button
                             variant="outline"
                             size="sm"
-                            className="font-bold"
-                            onClick={() => window.open(resolveFileUrl(doc.download_url), '_blank')}
+                            className="font-bold flex items-center gap-1.5 hover:border-[var(--color-primary)]"
+                            onClick={() => openViewer(doc)}
                           >
-                            Ver documento
+                            <Eye size={14} className="text-[var(--color-primary)]" /> Ver en línea
                           </Button>
+
+                          <button
+                            onClick={() => {
+                              const a = window.document.createElement('a')
+                              a.href = resolveFileUrl(doc.download_url)
+                              a.download = doc.file_name
+                              a.target = '_blank'
+                              window.document.body.appendChild(a)
+                              a.click()
+                              window.document.body.removeChild(a)
+                            }}
+                            className="p-1.5 rounded-lg text-[var(--color-text-dim)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg)] transition-colors"
+                            title="Descargar archivo"
+                          >
+                            <Download size={15} />
+                          </button>
 
                           {canReview && doc.status === 'pendiente' && (
                             <>
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="font-bold text-green-700 border-green-300 hover:bg-green-50"
+                                className="font-bold text-green-700 dark:text-green-400 border-green-300 dark:border-green-800 hover:bg-green-50 dark:hover:bg-green-950/40"
                                 disabled={reviewingId === doc.public_id}
                                 onClick={() => handleApprove(doc)}
                               >
@@ -165,7 +335,7 @@ export function DocumentosSection() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="font-bold text-red-700 border-red-300 hover:bg-red-50"
+                                className="font-bold text-red-700 dark:text-red-400 border-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-950/40"
                                 disabled={reviewingId === doc.public_id}
                                 onClick={() => {
                                   setRejectingId(doc.public_id)
@@ -183,9 +353,9 @@ export function DocumentosSection() {
 
                     {rejectingId === doc.public_id && (
                       <tr>
-                        <td colSpan={6} className="td bg-red-50/50">
+                        <td colSpan={6} className="td bg-red-50/50 dark:bg-red-950/20">
                           <div className="flex items-center gap-3 py-1">
-                            <span className="text-[12px] font-bold text-red-700 flex-shrink-0">
+                            <span className="text-[12px] font-bold text-red-700 dark:text-red-400 flex-shrink-0">
                               Motivo del rechazo (opcional):
                             </span>
                             <input
@@ -194,8 +364,11 @@ export function DocumentosSection() {
                               maxLength={300}
                               value={rejectComment}
                               onChange={(e) => setRejectComment(e.target.value)}
-                              placeholder="Ej. Falta la firma del director…"
-                              className="flex-1 text-[12.5px] px-3 py-1.5 rounded-lg border border-red-200 bg-white outline-none focus:border-red-400"
+                              placeholder="Ej. Falta la firma del director metodológico…"
+                              className="flex-1 text-[12.5px] px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-800 bg-[var(--color-surface)] text-[var(--color-text)] outline-none focus:border-red-400"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleReject(doc)
+                              }}
                             />
                             <Button
                               size="sm"
@@ -224,6 +397,17 @@ export function DocumentosSection() {
           )}
         </div>
       </Card>
+
+      {/* Visor Modal Interactivo */}
+      <DocumentViewerModal
+        isOpen={isViewerOpen}
+        onClose={() => setIsViewerOpen(false)}
+        document={activeViewerDoc}
+        canReview={canReview}
+        onApprove={(doc) => handleApprove(doc)}
+        onReject={(doc, comment) => handleReject(doc, comment)}
+        isReviewing={Boolean(reviewingId)}
+      />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { CheckCircle2, XCircle, Clock, Upload, FolderOpen, Send } from 'lucide-react'
+import { CheckCircle2, XCircle, Clock, Upload, FolderOpen, Send, Eye } from 'lucide-react'
 import { StatusBadge } from '@/components/ui/Badge'
 import { useAppStore } from '@/stores/app.store'
 import { ApiError } from '@/services/http'
@@ -8,6 +8,7 @@ import { documentsApi, type ChecklistItemOut } from '@/services/documents.servic
 import { processesApi, type ProcessOut, type ProcessHistoryOut } from '@/services/processes.service'
 import { workflowApi, type AllowedTransitionOut } from '@/services/workflow.service'
 import { formatRelativeDate } from '@/utils/format'
+import { DocumentViewerModal, type ViewerDocument } from '@/components/documentos/DocumentViewerModal'
 
 const CHECKLIST_COLORS: Record<string, string> = {
   aprobado: 'var(--color-teal)',
@@ -31,6 +32,8 @@ export function TrazabilidadSection() {
   const [actionError, setActionError] = useState<string | null>(null)
   const [isChangingState, setIsChangingState] = useState(false)
   const [uploadingType, setUploadingType] = useState<string | null>(null)
+  const [activeViewerDoc, setActiveViewerDoc] = useState<ViewerDocument | null>(null)
+  const [isViewerOpen, setIsViewerOpen] = useState(false)
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({})
 
   const load = () => {
@@ -202,6 +205,27 @@ export function TrazabilidadSection() {
                 </p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
+                {item.document && (
+                  <button
+                    onClick={() => {
+                      if (!item.document) return
+                      setActiveViewerDoc({
+                        public_id: item.document.public_id,
+                        file_name: item.document.file_name,
+                        download_url: item.document.download_url,
+                        studentName: process.student.full_name,
+                        documentType: item.document_type.name,
+                        version: item.document.version,
+                        status: item.document.status,
+                      })
+                      setIsViewerOpen(true)
+                    }}
+                    className="p-1.5 rounded-lg transition-colors text-[var(--color-text-dim)] hover:text-[var(--color-primary)] hover:bg-[var(--color-bg)]"
+                    title="Ver documento en línea"
+                  >
+                    <Eye size={16} />
+                  </button>
+                )}
                 {item.checklist_status === 'aprobado' && <CheckCircle2 size={18} style={{ color: CHECKLIST_COLORS.aprobado }} />}
                 {item.checklist_status === 'rechazado' && <XCircle size={18} style={{ color: CHECKLIST_COLORS.rechazado }} />}
                 {item.checklist_status === 'pendiente' && <Clock size={18} style={{ color: CHECKLIST_COLORS.pendiente }} />}
@@ -260,6 +284,13 @@ export function TrazabilidadSection() {
           )}
         </div>
       )}
+
+      {/* Visor Modal */}
+      <DocumentViewerModal
+        isOpen={isViewerOpen}
+        onClose={() => setIsViewerOpen(false)}
+        document={activeViewerDoc}
+      />
     </div>
   )
 }
